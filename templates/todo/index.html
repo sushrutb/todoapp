@@ -2,3 +2,8 @@
 	{{form}}
 	<button type="submit">Submit</button>
 </form>
+<ul>
+	{% for status in status_list %}
+	<li>{{status.message}}</li>
+	{% endfor %}
+</ul>

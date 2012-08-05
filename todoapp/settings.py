@@ -107,7 +107,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'gunicorn',
     'todo',
-#    'social-auth',
+    'social_auth',
+    'registration',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -142,3 +143,33 @@ LOGGING = {
         },
     }
 }
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    #'django.core.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.request',
+    'django.core.context_processors.csrf',
+)
+
+
+TWITTER_CONSUMER_KEY = 'L3JjG962LiuzxHkoQRilA'
+TWITTER_CONSUMER_SECRET = 'luqlhUfERJMBnRP7rQjDfUrf6rNjBYki5gwykSVFU'
+FACEBOOK_APP_ID = '253040264810160'
+FACEBOOK_API_SECRET = 'a46357a0cf79fc17d3a74d15947a29f1'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_ERROR_URL = '/accounts/login/'
+LOGOUT_REDIRECT_URL = '/'
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sb@simplycious.com'
+EMAIL_HOST_PASSWORD = 'DDbidwai%'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'no-reply@simplycious.com'
+ACCOUNT_ACTIVATION_DAYS = 7
