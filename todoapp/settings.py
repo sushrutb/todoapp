@@ -104,6 +104,8 @@ ROOT_URLCONF = 'todoapp.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'todoapp.wsgi.application'
 
+SITE_ID = 1
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -115,6 +117,7 @@ INSTALLED_APPS = (
     'todo',
     'social_auth',
     'registration',
+    'django.contrib.sites',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -179,3 +182,11 @@ EMAIL_HOST_PASSWORD = 'DDbidwai%'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'no-reply@simplycious.com'
 ACCOUNT_ACTIVATION_DAYS = 7
+
+try:
+    from django.db import connection, transaction
+    cursor = connection.cursor()
+    cursor.execute("UPDATE django_site set domain=\'" + SITE_DOMAIN + "\', name=\'" + SITE_DOMAIN_NAME + "\'")
+    transaction.commit_unless_managed()
+except Exception, e:
+    pass

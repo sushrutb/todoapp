@@ -8,3 +8,6 @@ SITE_ROOT = '/app/'
 TEMPLATE_DIRS = (
                  '/app/templates/',
 )
+
+SITE_DOMAIN_NAME = 'todoapp.sushrutbidwai.com'
+SITE_DOMAIN = 'todoapp.sushrutbidwai.com'
