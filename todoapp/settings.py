@@ -1,7 +1,17 @@
 # Django settings for todoapp project.
+import os
+import dj_database_url
+import social_auth
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+try:
+    from local_settings import *
+except ImportError:
+    if os.environ.get('MACHINE') == 'staging':
+        from staging_settings import *
+    else:
+        from production_settings import *
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
