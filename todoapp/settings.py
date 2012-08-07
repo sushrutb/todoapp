@@ -104,10 +104,6 @@ ROOT_URLCONF = 'todoapp.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'todoapp.wsgi.application'
 
-TEMPLATE_DIRS = (
-                 '/home/sushrut/todoapp/todoapp/templates',
-)
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
