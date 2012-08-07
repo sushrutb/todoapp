@@ -16,6 +16,7 @@ class Status(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)
+    type = models.CharField(max_length=16, default='user')
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
 
 class Mention(models.Model):
@@ -32,6 +33,9 @@ class StatusTag(models.Model):
 
 @receiver(user_activated, sender=DefaultBackend)
 def user_activated_process(sender, **kwargs):
-    print 'Received a signal here'
-    
+    user = kwargs.pop('user', None)
+    system_tags = ['#expenses', '#buy', '#todo', '#invoice', '#readlater', '#bookmark', '#diary']
+    for tag in system_tags:
+        new_tag = Tag(user=user, name=tag, type='system')
+        new_tag.save() 
 

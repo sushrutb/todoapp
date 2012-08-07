@@ -9,7 +9,7 @@ import settings
 urlpatterns = patterns('',
                        # shows list of products, ordered by recently added.
                        url(r'^$', 'todo.views.index'),
-                       url(r'^wiki/(?P<tag_name>[-\w]+)/$', 'todo.views.get_tag_view'),
+                       url(r'^tag/(?P<tag_name>[-\w]+)/$', 'todo.views.get_tag_view'),
                        (r'^accounts/logout/$', logout, {'next_page': '/'}),
                        (r'^accounts/', include('registration.backends.default.urls')),
                        url(r'', include('social_auth.urls')),

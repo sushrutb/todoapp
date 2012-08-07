@@ -4,6 +4,6 @@
 </form>
 <ul>
 	{% for status in status_list %}
-	<li>{{status.message}}</li>
+	<li>{% autoescape off %}{{status.message}}{% endautoescape %}</li>
 	{% endfor %}
 </ul>
