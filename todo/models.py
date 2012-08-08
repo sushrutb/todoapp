@@ -34,7 +34,13 @@ class StatusTag(models.Model):
     tag = models.ForeignKey(Tag)
     status = models.ForeignKey(Status)
     is_primary = models.BooleanField(default = False)
-    last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)    
+    last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
+    
+class StatusDO:
+    def __init__(self):
+        self.message = None
+        self.links = []
+        self.id = None
 
 @receiver(user_activated, sender=DefaultBackend)
 def user_activated_process(sender, **kwargs):

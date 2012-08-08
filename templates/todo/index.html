@@ -4,6 +4,11 @@
 </form>
 <ul>
 	{% for status in status_list %}
-	<li>{% autoescape off %}{{status.message}}{% endautoescape %}</li>
+	<li>
+		{% autoescape off %}{{status.message}}{% endautoescape %}
+		{% for link_ in status.links %}
+		{{link_}}
+		{% endfor %}
+	</li>
 	{% endfor %}
 </ul>
