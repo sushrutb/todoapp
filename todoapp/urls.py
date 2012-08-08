@@ -9,6 +9,7 @@ import settings
 urlpatterns = patterns('',
                        # shows list of products, ordered by recently added.
                        url(r'^$', 'todo.views.index'),
+                       url(r'^tag/update', 'todo.views.update_status'),
                        url(r'^tag/(?P<tag_name>[-\w]+)/$', 'todo.views.get_tag_view'),
                        (r'^accounts/logout/$', logout, {'next_page': '/'}),
                        (r'^accounts/', include('registration.backends.default.urls')),

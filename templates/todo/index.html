@@ -7,7 +7,7 @@
 	<li>
 		{% autoescape off %}{{status.message}}{% endautoescape %}
 		{% for link_ in status.links %}
-		{{link_}}
+		<a href="/tag/update?tag_id={{status.tag_id}}&new_status={{link_}}&status_id={{status.id}}">{{link_}}</a>
 		{% endfor %}
 	</li>
 	{% endfor %}
