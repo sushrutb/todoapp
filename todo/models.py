@@ -18,6 +18,11 @@ class Tag(models.Model):
     user = models.ForeignKey(User)
     type = models.CharField(max_length=16, default='user')
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
+    
+class TagStatus(models.Model):
+    tag = models.ForeignKey(Tag)
+    status = models.CharField(max_length=16, default = 'created')
+    last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
 
 class Mention(models.Model):
     name = models.CharField(max_length = 30)
@@ -34,8 +39,12 @@ class StatusTag(models.Model):
 @receiver(user_activated, sender=DefaultBackend)
 def user_activated_process(sender, **kwargs):
     user = kwargs.pop('user', None)
-    system_tags = ['#expenses', '#buy', '#todo', '#invoice', '#readlater', '#bookmark', '#diary']
+    system_tags = [('#expenses', ('reported', 'reimbursed')), ('#buy', ('bought',)),
+                   ('#todo', ('completed',)), ('#invoice', ('sent',)), ('#readlater', ('done',)), ('#bookmark',()), ('#diary',()),]
+    
     for tag in system_tags:
-        new_tag = Tag(user=user, name=tag, type='system')
-        new_tag.save() 
-
+        new_tag = Tag(user=user, name=tag[0], type='system')
+        new_tag.save()
+        for status in tag[1]:
+            tag_status = TagStatus(tag=new_tag, status=status)
+            tag_status.save()
