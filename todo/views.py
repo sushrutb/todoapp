@@ -88,10 +88,10 @@ def show_index_view(request, redirecturl, tag_name):
             return HttpResponseRedirect(redirecturl)
     
     if tag_name is None:    
-        message_list = [format_message(message) for message in Message.objects.filter(user=user).order_by('-last_modified')]
+        message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')]
     else:
         tag = Tag.objects.get(user=user, name=tag_name)
-        message_list = [format_message(message_tag.message) for message_tag in MessageTag.objects.filter(tag=tag).order_by('-last_modified')]
+        message_list = [format_message(message_tag.message) for message_tag in MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').order_by('-last_modified')]
     
     return render(request, 'todo/index.html', {
         'form': AddStatusForm(),

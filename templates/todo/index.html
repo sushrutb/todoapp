@@ -13,7 +13,7 @@
 		{% for link_ in message.links %}
 			<a href="/tag/update?tag_id={{message.tag_id}}&new_status={{link_}}&message_id={{message.id}}"><span class="label label-important">{{link_}}</span></a>
 		{% endfor %}
-		<div id="deleteMessage"><button class="close">&times;</button></div>
+		<div id="deleteMessage"><a href="/tag/update?tag_id={{message.tag_id}}&new_status=deleted&message_id={{message.id}}"><button class="close">&times;</button></a></div>
 	</div>
 {% endfor %}
 </div>
