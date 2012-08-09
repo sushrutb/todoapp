@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.dispatch import dispatcher, receiver
+from django.dispatch import receiver
 from registration.signals import user_activated
 from registration.backends.default import DefaultBackend
 
@@ -17,8 +17,9 @@ class Tag(models.Model):
 class Message(models.Model):
     message = models.CharField(max_length=320)
     user = models.ForeignKey(User)
+    status = models.CharField(max_length=30, default='created')
+    primary_tag = models.ForeignKey(Tag, null = True)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
-    
     
 class TagStatus(models.Model):
     tag = models.ForeignKey(Tag)
@@ -34,8 +35,6 @@ class Mention(models.Model):
 class MessageTag(models.Model):
     tag = models.ForeignKey(Tag)
     message = models.ForeignKey(Message)
-    status = models.CharField(max_length=16)
-    is_primary = models.BooleanField(default = False)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
     
 class StatusDO:
