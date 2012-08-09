@@ -30,9 +30,9 @@
     <link rel="apple-touch-icon-precomposed" href="../docs/assets/ico/apple-touch-icon-57-precomposed.png">
   </head>
 
-  <body style="max-width:480px">
+  <body style="max-width:480px;margin-left:auto;margin-right:auto">
 
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-fixed-top" style="max-width:480px;margin-left:auto;margin-right:auto">
       <div class="navbar-inner">
         <div class="container">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -40,7 +40,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Project name</a>
+          <a class="brand" href="#">Todo App</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
@@ -52,10 +52,27 @@
       </div>
     </div>
 
-    <div class="container">
-
-      <h1>Bootstrap starter template</h1>
-      <p>Use this document as a way to quick start any new project.<br> All you get is this message and a barebones HTML document.</p>
+    <div class="container" style="max-width:480px">
+		<form class="form-vertical">
+		  <label>Message</label>
+		  <textarea rows="4" class="span3" placeholder="Type something…"></textarea>
+		  <button type="submit" class="btn">Submit</button>
+		</form>
+		
+		<div id="messagesDiv">
+		<div class="well" id="messageDisplay">
+			<a href="http://127.0.0.1:8000/tag/expenses">#expenses</a> something.
+			<br/>
+			<span class="label label-important">reimbursed</span>
+			<div id="deleteMessage"><button class="close">&times;</button></div>
+		</div>
+		<div class="well" id="messageDisplay">
+			<a href="http://127.0.0.1:8000/tag/expenses">#expenses</a> something.
+			<br/>
+			<span class="label label-important">reimbursed</span>
+			<div id="deleteMessage"><button class="close">&times;</button></div>
+		</div>
+		</div>
 
     </div> <!-- /container -->
 
@@ -63,18 +80,18 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="../docs/assets/js/jquery.js"></script>
-    <script src="../docs/assets/js/bootstrap-transition.js"></script>
-    <script src="../docs/assets/js/bootstrap-alert.js"></script>
-    <script src="../docs/assets/js/bootstrap-modal.js"></script>
-    <script src="../docs/assets/js/bootstrap-dropdown.js"></script>
-    <script src="../docs/assets/js/bootstrap-scrollspy.js"></script>
-    <script src="../docs/assets/js/bootstrap-tab.js"></script>
-    <script src="../docs/assets/js/bootstrap-tooltip.js"></script>
-    <script src="../docs/assets/js/bootstrap-popover.js"></script>
-    <script src="../docs/assets/js/bootstrap-button.js"></script>
-    <script src="../docs/assets/js/bootstrap-collapse.js"></script>
-    <script src="../docs/assets/js/bootstrap-carousel.js"></script>
-    <script src="../docs/assets/js/bootstrap-typeahead.js"></script>
+    <script>
+		$(document).ready(function(){ 
 
+			$(this).find('#messagesDiv #deleteMessage').hide();
+			$('#messagesDiv #messageDisplay').hover(
+			function(){
+				$(this).find('#deleteMessage').show();
+			},
+			function(){
+				$(this).find('#deleteMessage').hide();
+			});
+		});
+	</script>
   </body>
 </html>

@@ -64,6 +64,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+                    os.path.join(SITE_ROOT, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -116,10 +117,8 @@ INSTALLED_APPS = (
     'social_auth',
     'registration',
     'django.contrib.sites',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'storages',
+    'django_forms_bootstrap',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -180,6 +179,16 @@ EMAIL_HOST_PASSWORD = 'DDbidwai%'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'no-reply@simplycious.com'
 ACCOUNT_ACTIVATION_DAYS = 7
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
+AWS_ACCESS_KEY_ID = 'AKIAJOTC7XECHF2LD2NQ'
+AWS_SECRET_ACCESS_KEY = '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'
+STATIC_URL = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME + 'docs/assets/'
+ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+AWS_QUERYSTRING_AUTH = False
+AWS_GZIP = True
+
 
 try:
     from django.db import connection, transaction

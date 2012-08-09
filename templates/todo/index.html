@@ -1,14 +1,38 @@
-<form action="" method="post">
-	{{form}}
+{% extends "base.html"%}
+{% block content %}
+{% load bootstrap_tags %}
+<form action="" method="post" class="form-vertical">
+	{{form|as_bootstrap}}
 	<button type="submit">Submit</button>
 </form>
-<ul>
-	{% for status in status_list %}
-	<li>
-		{% autoescape off %}{{status.message}}{% endautoescape %}
-		{% for link_ in status.links %}
-		<a href="/tag/update?tag_id={{status.tag_id}}&new_status={{link_}}&status_id={{status.id}}">{{link_}}</a>
+<div id="messagesDiv">
+{% for message in message_list %}
+	<div class="well" id="messageDisplay">
+		{% autoescape off %}{{message.message}}{% endautoescape %}
+		<br/>
+		{% for link_ in message.links %}
+			<a href="/tag/update?tag_id={{message.tag_id}}&new_status={{link_}}&message_id={{message.id}}"><span class="label label-important">{{link_}}</span></a>
 		{% endfor %}
-	</li>
-	{% endfor %}
-</ul>
+		<div id="deleteMessage"><button class="close">&times;</button></div>
+	</div>
+{% endfor %}
+</div>
+{% endblock %}
+{% block scripts %}
+    <script>
+		$(document).ready(function(){ 
+
+			$('#messagesDiv #deleteMessage').hide();
+			$('#messagesDiv #messageDisplay').hover(
+			function(){
+				//alert('In show tag')
+				$(this).find('#deleteMessage').show();
+			},
+			function(){
+				//alert('In hide tag')
+				$(this).find('#deleteMessage').hide();
+			});
+		});
+	</script>
+{% endblock %}
+

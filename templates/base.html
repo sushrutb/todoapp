@@ -9,9 +9,7 @@
 
     <!-- Le styles -->
     <link rel="shortcut icon" href="{{STATIC_URL}}favicon.ico" >
-    <link href="{{STATIC_URL}}bootstrap.css" rel="stylesheet">
-    <link href="{{STATIC_URL}}simplycious.css" rel="stylesheet">
-    <link href="{{STATIC_URL}}jquery.rating.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -19,164 +17,38 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     
-    <script src="{{STATIC_URL}}jquery.js"></script>
-    <script src="{{STATIC_URL}}jquery.tabSlideOut.v1.3.js"></script>
-     
-     <script>
-     $(function(){
-         $('.slide-out-div').tabSlideOut({
-             tabHandle: '.handle',                              //class of the element that will be your tab
-             pathToTabImage: '{{STATIC_URL}}contact_tab.gif',          //path to the image for the tab (optionaly can be set using css)
-             imageHeight: '122px',                               //height of tab image
-             imageWidth: '40px',                               //width of tab image    
-             tabLocation: 'right',                               //side of screen where tab lives, top, right, bottom, or left
-             speed: 300,                                        //speed of animation
-             action: 'click',                                   //options: 'click' or 'hover', action to trigger animation
-             topPos: '200px',                                   //position from the top
-             fixedPosition: true                               //options: true makes it stick(fixed position) on scroll
-         });
-     });
-
-     </script>
-
-    
-    <script type="text/javascript">
-	  var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', 'UA-33112694-1']);
-	  _gaq.push(['_setDomainName', 'simplycious.com']);
-	  _gaq.push(['_trackPageview']);
-	
-	  (function() {
-	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	  })();
-	</script>
+    <script src="{{STATIC_URL}}js/jquery.js"></script>
 	
   </head>
 
-  <body data-spy="scroll" data-target="#productMenu">
+  <body style="max-width:480px;margin-left:auto;margin-right:auto">
 
-	<div class="navbar navbar-fixed-top">
-	    <div class="navbar-inner">
-	      <div class="container">
-	        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-	          <span class="icon-bar"></span>
-	        </a>
-	        <a class="brand" href="/">Simplycious</a>
-	        <div class="nav-collapse">
-	          <ul class="nav">
-	            <li><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-	            <li><a href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
-	            <li><a href="/category/enterprise/">Enterprise</a></li>
-	            <li><a href="/category/personal/">Personal</a></li>
-	            <li><a href="/category/mobile/">Mobile</a></li>
-	            <li><a href="/category/social/">Social</a></li>
-	            <li><a href="/category/tablet/">Tablet</a></li>
-	            <li><a href="/category/misc/">Misc</a></li>
-	            {% if user.is_authenticated %}
-	            <li><a href="/accounts/logout/">Logout</a></li>
-	            {% else %}
-	            <li><a href="/accounts/login/">Login</a></li>
-	            {% endif %}
-	          </ul>
-	          <form class="navbar-search pull-left" action="/search/" method="post">
-	            <input type="text" id="query" name="query" class="search-query span2" style="width:190px;" placeholder="e.g. Customer support">
-	            <button type="submit" class="btn btn-primary" style="margin-top: 0px; margin-right: 0px">Search</button>
-	          </form>
-	        </div><!-- /.nav-collapse -->
-	      </div>
-	    </div><!-- /navbar-inner -->
-	  </div><!-- /navbar -->
+    <div class="navbar navbar-fixed-top" style="max-width:480px;margin-left:auto;margin-right:auto">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">Todo App</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
     
-    <div class="container" style="min-height: 500px; margin-top: 50px">
+    <div class="container" style="max-width:480px;margin-top: 50px">
 
-	    {% block Content %}
+	    {% block content %}
 	    {% endblock %}
     
 	</div> <!-- /container -->
 
-	<!-- footer -->
-	<footer>
-		<div class="container">
-			<div class="span2">
-				<a href="/categories/"><h3>Categories</h3></a>
-				<ul class="unstyled">
-					<li><a href="/category/enterprise/">Enterprise</a></li>
-					<li><a href="/category/personal/">Personal</a></li>
-					<li><a href="/category/mobile/">Mobile</a></li>
-					<li><a href="/category/social/">Social</a></li>
-					<li><a href="/category/tablet/">Tablet</a></li>
-					<li><a href="/category/misc/">Misc</a></li>
-				</ul>
-			</div>
-			<div class="span2">
-				<a href="/products/"><h3>Products</h3></a>
-				<ul class="unstyled">
-					<li><a href="/product/add/">Add</a></li>
-					<li><a href="/search/">Search</a></li>
-					<li><a href="/products/compare/">Compare</a></li>
-					<li><a href="/product/random/">Random</a></li>
-				</ul>
-			</div>
-			{% if user.is_authenticated %}
-			<div class="span2">
-				<h3>{{user.username}}</h3>
-				<ul class="unstyled">
-					<li><a href="/accounts/password/change/">Change password</a></li>
-					<li><a href="/accounts/logout/">Logout</a></li>
-				</ul>
-			</div>
-			{% else %}
-			<div class="span2">
-				<h3>Account</h3>
-				<ul class="unstyled">
-					<li><a href="/accounts/register/">Sign up</a></li>
-					<li><a href="/accounts/login/">Login</a></li>
-					<li><a href="/accounts/password/reset/">Forgot Password</a></li>
-				</ul>
-			</div>
-			{% endif %}
+   
 
-			<div class="span4 offset1">
-				<h3>About</h3>
-				<p>Simplycious is a web service which lets you compare and choose software products easily. Please contanct <a href="mailto:info@simplycious.com">info@simplycious.com</a> for any inquiries.</p>
-			</div>
-		</div>
-	</footer>
-	
-    <div class="slide-out-div">
-        <a class="handle" href="">Content</a>
-        <h3>Share!</h3>
-        <a href="http://twitter.com/home?status=http://simplycious.com{{request.get_full_path}}" title="Click to send this page to Twitter!" target="_blank"><img src="{{STATIC_URL}}t.png"></a><br /><p>Twitter</p>
-        <a href="https://www.facebook.com/sharer.php?u=http://simplycious.com{{request.get_full_path}}"  target="_blank"><img src="{{STATIC_URL}}fb.png"></a><br /><p>Facebook</p>
-        <a href="https://plus.google.com/share?url=http://simplycious.com{{request.get_full_path}}"  target="_blank"><img src="{{STATIC_URL}}gp.png"></a><br /><p>G+</p>
-        <a href="http://pinterest.com/pin/create/button/?url=http://simplycious.com{{request.get_full_path}}&description=Dummy%20Description"  target="_blank" class="pin-it-button" count-layout="horizontal"><img src="{{STATIC_URL}}p.png"></a><br /><p>Pintrest</p>
-    </div>
-
-     
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{STATIC_URL}}jquery.rating.js"></script>
-    <script src="{{STATIC_URL}}jquery.rating.pack.js"></script>
-    <!-- <script src="{{STATIC_URL}}bootstrap-transition.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-alert.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-dropdown.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-scrollspy.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-tab.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-tooltip.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-popover.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-button.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-collapse.js"></script>-->
-    <script src="{{STATIC_URL}}bootstrap.min.js"></script>
-    <!-- <script src="{{STATIC_URL}}bootstrap-modal.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-carousel.js"></script>
-    <script src="{{STATIC_URL}}bootstrap-typeahead.js"></script>-->
-    <script src="{{STATIC_URL}}jquery.tabSlideOut.v1.3.js"></script>
-    {% block scripts %}{% endblock %}
+    <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+    {% block scripts %}
+    {% endblock %}
   </body>
 </html>

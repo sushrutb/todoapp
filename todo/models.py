@@ -14,7 +14,7 @@ class Tag(models.Model):
     type = models.CharField(max_length=16, default='user')
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
     
-class Status(models.Model):
+class Message(models.Model):
     message = models.CharField(max_length=320)
     user = models.ForeignKey(User)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
@@ -27,14 +27,14 @@ class TagStatus(models.Model):
 
 class Mention(models.Model):
     name = models.CharField(max_length = 30)
-    status = models.ForeignKey(Status)
+    message = models.ForeignKey(Message)
     is_primary = models.BooleanField(default = False)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
     
-class StatusTag(models.Model):
+class MessageTag(models.Model):
     tag = models.ForeignKey(Tag)
-    status = models.ForeignKey(Status)
-    status_ind = models.CharField(max_length=16)
+    message = models.ForeignKey(Message)
+    status = models.CharField(max_length=16)
     is_primary = models.BooleanField(default = False)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
     
