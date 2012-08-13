@@ -14,4 +14,5 @@ urlpatterns = patterns('',
                        (r'^accounts/logout/$', logout, {'next_page': '/'}),
                        (r'^accounts/', include('registration.backends.default.urls')),
                        url(r'', include('social_auth.urls')),
+                       (r'^project/', include('project.urls')),
 )

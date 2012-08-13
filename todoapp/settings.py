@@ -114,11 +114,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'gunicorn',
     'todo',
+    'project',
     'social_auth',
     'registration',
     'django.contrib.sites',
     'storages',
     'django_forms_bootstrap',
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging

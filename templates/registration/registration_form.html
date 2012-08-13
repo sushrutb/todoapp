@@ -1,20 +1,13 @@
-<div class="row">
+{% extends "base.html"%}
+{% block content %}
+{% load bootstrap_tags %}
+
+	<legend>Sign up</legend>
 	
-	<div class="span6 offset3" style="text-align: center">
-		<legend>Sign up</legend>
-		
-		<form class="form-horizontal" action="" method="post" style="margin-top: 20px">
-			<div class="control-group">
-		    <label class="control-label">Sign up with</label>
-		    <div class="controls">
-				<a href="/login/facebook?next={{ request.GET.next }}"><img src="{{STATIC_URL}}facebook.png" /></a>
-				<a href="/login/twitter?next={{ request.GET.next }}"><img src="{{STATIC_URL}}twitter.png" /></a>
-		    </div>
-		    </div>
-		    {{ form}}
-		    <div class="form-actions">
-		      <button type="submit" class="btn btn-primary" value="Register &rarr;">Signup</button>
-		    </div>
-		</form>
-	</div>
-</div>
+	<form class="form-horizontal" action="" method="post" style="margin-top: 20px">
+	    {{ form|as_bootstrap}}
+	    <div class="form-actions">
+	      <button type="submit" class="btn btn-primary" value="Register &rarr;">Signup</button>
+	    </div>
+	</form>
+{% endblock %}

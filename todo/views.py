@@ -2,6 +2,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django import forms
+from django.forms import widgets
 from forms import AddStatusForm
 from models import Message, Mention, Tag, MessageTag, TagStatus, StatusDO
 from django.utils.safestring import mark_safe
@@ -89,11 +91,15 @@ def show_index_view(request, redirecturl, tag_name):
     
     if tag_name is None:    
         message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')]
+        form = AddStatusForm()
     else:
         tag = Tag.objects.get(user=user, name=tag_name)
         message_list = [format_message(message_tag.message) for message_tag in MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').order_by('-last_modified')]
+        form = AddStatusForm(initial={'message':tag_name + ' '})
+    
+    
     
     return render(request, 'todo/index.html', {
-        'form': AddStatusForm(),
+        'form': form,
         'message_list':message_list,
     })

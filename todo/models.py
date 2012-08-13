@@ -3,15 +3,13 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from registration.signals import user_activated
 from registration.backends.default import DefaultBackend
-
-class Project(models.Model):
-    name = models.CharField(max_length=30)
-    last_modified = models.DateTimeField(auto_now = True, auto_now_add=True)
+from datetime import datetime
 
 class Tag(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)
     type = models.CharField(max_length=16, default='user')
+    created = models.DateTimeField(default=datetime.now)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
     
 class Message(models.Model):
@@ -19,11 +17,13 @@ class Message(models.Model):
     user = models.ForeignKey(User)
     status = models.CharField(max_length=30, default='created')
     primary_tag = models.ForeignKey(Tag, null = True)
+    created = models.DateTimeField(default=datetime.now)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
     
 class TagStatus(models.Model):
     tag = models.ForeignKey(Tag)
     status = models.CharField(max_length=16, default = 'created')
+    order_id = models.IntegerField(default=1, null=True)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
 
 class Mention(models.Model):
