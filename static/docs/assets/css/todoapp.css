@@ -21,3 +21,8 @@ footer a:hover {
 footer h3 {
 	margin-top: 10px;
 }
+
+#id_message {
+	max-width:480px;
+	min-width:480px;
+}

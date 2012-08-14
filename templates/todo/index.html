@@ -2,7 +2,17 @@
 {% block content %}
 {% load bootstrap_tags %}
 <form action="" method="post" class="form-vertical">
-	{{form|as_bootstrap}}
+	<!-- {{form|as_bootstrap}}-->
+	{% for field in form %}
+	<div id="div_id_message" class="control-group">
+<!-- 	<label for="id_message" class="control-label required-field">
+                Message
+         </label>-->
+        <div class="controls">
+             {{ field }}
+        </div>
+    </div>
+    {% endfor %}
 	<button type="submit">Submit</button>
 </form>
 <div id="messagesDiv">

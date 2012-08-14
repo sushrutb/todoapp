@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from registration.signals import user_activated
 from registration.backends.default import DefaultBackend
 from datetime import datetime
-
+from todoapp.settings import system_tags
 class Tag(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)
@@ -56,3 +56,14 @@ def user_activated_process(sender, **kwargs):
         for status in tag[1]:
             tag_status = TagStatus(tag=new_tag, status=status)
             tag_status.save()
+            
+class SystemTag(models.Model):
+    system_tag = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    last_modified= models.DateTimeField(auto_now=True)
+    
+class SystemTagStatus(models.Model):
+    system_tag = models.ForeignKey(SystemTag)
+    status = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    last_modified= models.DateTimeField(auto_now=True)

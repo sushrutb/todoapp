@@ -199,3 +199,9 @@ try:
     transaction.commit_unless_managed()
 except Exception, e:
     pass
+
+system_tags = {
+                "expenses": ('reported', 'reimbursed'), 
+                "#buy":('bought',), 
+                "#testtag":('teststate1', 'teststate2')
+                }
