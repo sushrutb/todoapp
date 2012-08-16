@@ -6,15 +6,9 @@ from django.dispatch import receiver
 from todo.models import Tag
 
 class Project(models.Model):
-    PROJECT_STATUS = ((1, 'active'),
-                      (2, 'inactive'),
-                      (3, 'closed'),
-                      (4, 'cancelled'),
-                      (5, 'completed'),
-                      )
     name = models.CharField(max_length=30)
     type = models.CharField(max_length=30, default = 'misc')
-    status = models.IntegerField(choices=PROJECT_STATUS, default=1)
+    status = models.CharField(max_length=30, default='active')
     user = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add=True)
@@ -25,8 +19,6 @@ class ProjectUser(models.Model):
     role = models.CharField(max_length=16, default='member')
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add=True)
-
-#post_save(project_created, sender=Project)
 
 @receiver(post_save, sender=Project)
 def project_created(sender, **kwargs):

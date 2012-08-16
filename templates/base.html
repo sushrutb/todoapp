@@ -32,15 +32,30 @@
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li class="dropdown">
+              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags <b class="caret"></b></a>
+        		<ul class="dropdown-menu">
+        			{% for popular_tag in popular_tag_list %}
+        			<li><a href="/tag/{{popular_tag}}">#{{popular_tag}}</a></li>
+        			{% endfor %}
+        		</ul>
+              </li>
+              <li class="dropdown">
+              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects <b class="caret"></b></a>
+        		<ul class="dropdown-menu">
+        			{% for project in project_list %}
+        			<li><a href="/project/{{project.name}}">{{project.name}}</a></li>
+        			{% endfor %}
+          			<li><a href="/project/new/">+ Create new</a></li>
+        		</ul>
+              </li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
     
-    <div class="container" style="margin-top: 50px">
+    <div class="container" style="margin-top: 50px;min-height: 450px">
 
 	    {% block content %}
 	    {% endblock %}

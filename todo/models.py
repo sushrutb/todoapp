@@ -48,3 +48,10 @@ class SystemTagStatus(models.Model):
     status = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     last_modified= models.DateTimeField(auto_now=True)
+
+@receiver(user_activated, sender=DefaultBackend)
+def user_activated_process(sender, **kwargs):
+    from management.commands.run_config import run_user_config
+    user = kwargs.pop('user', None)
+    print 'activating user ' + str(user.id)
+    run_user_config(user)

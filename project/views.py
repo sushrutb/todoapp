@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from forms import AddProjectForm
-from models import Project
+from models import Project, ProjectUser
 from todo.models import Tag
 from todo.views import show_index_view
 
@@ -27,6 +27,11 @@ def add_new(request):
             project.name = name
             project.user = user
             project.save()
+            
+            project_user = ProjectUser()
+            project_user.project = project
+            project_user.user = user
+            project_user.save()
             
             tag = Tag()
             tag.name = '#' + name

@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from forms import AddStatusForm
 from models import Message, Mention, Tag, MessageTag, SystemTagStatus, SystemTag, StatusDO
+from project.models import ProjectUser
 from django.utils.safestring import mark_safe
+from django.db import connection
 import re
 
 
@@ -31,7 +33,9 @@ def format_message(message):
     print message.user.id
     status_do = StatusDO()
     primary_tag = message.primary_tag
+    print '>>> ' + primary_tag.type
     if primary_tag is not None and primary_tag.type == 'system':
+        
         status_do.tag_id = primary_tag.id
         print primary_tag.name
         tag_status_list = SystemTagStatus.objects.filter(system_tag=SystemTag.objects.get(system_tag=primary_tag.name))
@@ -45,7 +49,7 @@ def format_message(message):
     message_tags = MessageTag.objects.filter(message=message)
     status_do.message = message.message
     for message_tag in message_tags:
-        status_do.message = status_do.message.replace(message_tag.tag.name, '<a href="http://127.0.0.1:8000/tag/' + message_tag.tag.name.replace('#', '') + '">' + message_tag.tag.name + '</a>')
+        status_do.message = status_do.message.replace(message_tag.tag.name, '<a href="/tag/' + message_tag.tag.name.replace('#', '') + '">' + message_tag.tag.name + '</a>')
         mark_safe(status_do.message)
         
     return status_do
@@ -70,9 +74,13 @@ def show_index_view(request, redirecturl, tag_name):
         form = AddStatusForm(initial={'message':tag_name + ' '})
         form.fields['message'].attrs = {'rows':'20'}
     
+    project_list = get_project_list(user)
+    popular_tag_list = get_popular_tags(user)
     return render(request, 'todo/index.html', {
         'form': form,
         'message_list':message_list,
+        'project_list':project_list,
+        'popular_tag_list':popular_tag_list,
     })
 
 def process_message_form(request, redirecturl, tag_name):
@@ -126,3 +134,14 @@ def process_tags(tags, message, user):
             new_tag.save()
         message_tag = MessageTag(tag=new_tag, message=message)
         message_tag.save()
+        
+def get_project_list(user):
+    project_list = [project_user.project for project_user in ProjectUser.objects.filter(user=user, project__status='active')]
+    return project_list
+
+def get_popular_tags(user):
+    cursor = connection.cursor()
+    cursor.execute("select name from todo_tag where todo_tag.id in (select primary_tag_id from todo_message where user_id = %s and primary_tag_id not in (select id from todo_tag where user_id = %s and type='project') group by primary_tag_id order by count(*) desc)",[user.id, user.id])
+    tags = cursor.fetchall()
+    tags = [tag[0].replace('#','') for tag in tags]
+    return tags

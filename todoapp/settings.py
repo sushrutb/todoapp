@@ -203,10 +203,11 @@ except Exception, e:
 system_tags = {
                 "#expenses": ('reported', 'reimbursed'), 
                 "#buy":('bought',), 
-                "#testtag":('teststate1', 'teststate2'),
                 "#bookmark":None,
+                "#readlater":('done',),
+                "#wishlist":('bought',),
+                "#readlater":('done',),
+                "#todo":('completed',),
+#                "#invoice": ('sent','received'),
+#                "diary":None,
                 }
-'''
-    system_tags = [('#expenses', ('reported', 'reimbursed')), ('#buy', ('bought',)),
-                   ('#todo', ('completed',)), ('#invoice', ('sent',)), ('#readlater', ('done',)), ('#bookmark',()), ('#diary',()),]
-''' 
