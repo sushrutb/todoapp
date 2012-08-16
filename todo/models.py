@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from registration.signals import user_activated
 from registration.backends.default import DefaultBackend
 from datetime import datetime
-from todoapp.settings import system_tags
+
 class Tag(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)
@@ -18,12 +18,6 @@ class Message(models.Model):
     status = models.CharField(max_length=30, default='created')
     primary_tag = models.ForeignKey(Tag, null = True)
     created = models.DateTimeField(default=datetime.now)
-    last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
-    
-class TagStatus(models.Model):
-    tag = models.ForeignKey(Tag)
-    status = models.CharField(max_length=16, default = 'created')
-    order_id = models.IntegerField(default=1, null=True)
     last_modified = models.DateTimeField(auto_now = True, auto_now_add = True)
 
 class Mention(models.Model):
@@ -44,19 +38,6 @@ class StatusDO:
         self.id = None
         self.tag_id = None
 
-@receiver(user_activated, sender=DefaultBackend)
-def user_activated_process(sender, **kwargs):
-    user = kwargs.pop('user', None)
-    system_tags = [('#expenses', ('reported', 'reimbursed')), ('#buy', ('bought',)),
-                   ('#todo', ('completed',)), ('#invoice', ('sent',)), ('#readlater', ('done',)), ('#bookmark',()), ('#diary',()),]
-    
-    for tag in system_tags:
-        new_tag = Tag(user=user, name=tag[0], type='system')
-        new_tag.save()
-        for status in tag[1]:
-            tag_status = TagStatus(tag=new_tag, status=status)
-            tag_status.save()
-            
 class SystemTag(models.Model):
     system_tag = models.TextField()
     created = models.DateTimeField(auto_now_add=True)

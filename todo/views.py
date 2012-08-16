@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from forms import AddStatusForm
-from models import Message, Mention, Tag, MessageTag, TagStatus, StatusDO
+from models import Message, Mention, Tag, MessageTag, SystemTagStatus, SystemTag, StatusDO
 from django.utils.safestring import mark_safe
 import re
 
@@ -28,17 +28,19 @@ def update_status(request):
     return HttpResponseRedirect("/")
 
 def format_message(message):
+    print message.user.id
     status_do = StatusDO()
     primary_tag = message.primary_tag
-    if primary_tag is not None:
+    if primary_tag is not None and primary_tag.type == 'system':
         status_do.tag_id = primary_tag.id
-        tag_status_list = TagStatus.objects.filter(tag=primary_tag)
+        print primary_tag.name
+        tag_status_list = SystemTagStatus.objects.filter(system_tag=SystemTag.objects.get(system_tag=primary_tag.name))
         for tag_status in tag_status_list:
             if tag_status.status != message.status:
                 status_do.links.append(tag_status.status)
             else:
                 status_do.links = []
-        
+
     status_do.id = message.id
     message_tags = MessageTag.objects.filter(message=message)
     status_do.message = message.message

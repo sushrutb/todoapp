@@ -201,7 +201,12 @@ except Exception, e:
     pass
 
 system_tags = {
-                "expenses": ('reported', 'reimbursed'), 
+                "#expenses": ('reported', 'reimbursed'), 
                 "#buy":('bought',), 
-                "#testtag":('teststate1', 'teststate2')
+                "#testtag":('teststate1', 'teststate2'),
+                "#bookmark":None,
                 }
+'''
+    system_tags = [('#expenses', ('reported', 'reimbursed')), ('#buy', ('bought',)),
+                   ('#todo', ('completed',)), ('#invoice', ('sent',)), ('#readlater', ('done',)), ('#bookmark',()), ('#diary',()),]
+''' 
