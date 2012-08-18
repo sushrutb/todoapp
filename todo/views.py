@@ -68,12 +68,10 @@ def show_index_view(request, redirecturl, tag_name):
     if tag_name is None:    
         message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')]
         form = AddStatusForm()
-        form.fields['message'].attrs = {'class':'span3 messageArea'}
     else:
         tag = Tag.objects.get(user=user, name=tag_name)
         message_list = [format_message(message_tag.message) for message_tag in MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').order_by('-last_modified')]
         form = AddStatusForm(initial={'message':tag_name + ' '})
-        form.fields['message'].attrs = {'class':'span3 messageArea'}
     
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
