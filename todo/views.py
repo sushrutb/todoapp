@@ -1,4 +1,3 @@
-# Create your views here.
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -12,11 +11,40 @@ import re
 
 @login_required    
 def get_tag_view(request, tag_name):
-    return show_index_view(request, "/tag/"+tag_name, '#'+tag_name)
+    page = int(request.GET.get('page', '1'))
+    tag = Tag.objects.get(user=request.user, name='#'+tag_name)
+    user=request.user
+    process_form(request)
+    message_tag_list = MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').order_by('-last_modified')[:5 * page]
+    
+    message_list = [format_message(message_tag.message) for message_tag in message_tag_list]
+    form = AddStatusForm(initial={'message':'#'+tag_name + ' '})
+    project_list = get_project_list(user)
+    popular_tag_list = get_popular_tags(user)
+    return render(request, 'todo/index.html', {
+        'form': form,
+        'message_list':message_list,
+        'project_list':project_list,
+        'popular_tag_list':popular_tag_list,
+        'page':page+1,
+    })
 
+       
 @login_required
 def index(request):
-    return show_index_view(request, "/", None)
+    page = int(request.GET.get('page', '1'))
+    user=request.user
+    process_form(request)
+    message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')[:5 * page]]
+    project_list = get_project_list(user)
+    popular_tag_list = get_popular_tags(user)
+    return render(request, 'todo/index.html', {
+        'form': AddStatusForm(),
+        'message_list':message_list,
+        'project_list':project_list,
+        'popular_tag_list':popular_tag_list,
+        'page':page+1,
+    })
     
 @login_required
 def update_status(request):
@@ -27,17 +55,14 @@ def update_status(request):
     message = Message.objects.get(id=message_id)
     message.status = new_status
     message.save()
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(request.path)
 
 def format_message(message):
-    print message.user.id
     status_do = StatusDO()
     primary_tag = message.primary_tag
-    print '>>> ' + primary_tag.type
     if primary_tag is not None and primary_tag.type == 'system':
         
         status_do.tag_id = primary_tag.id
-        print primary_tag.name
         tag_status_list = SystemTagStatus.objects.filter(system_tag=SystemTag.objects.get(system_tag=primary_tag.name))
         for tag_status in tag_status_list:
             if tag_status.status != message.status:
@@ -53,7 +78,6 @@ def format_message(message):
         mark_safe(status_do.message)
         
     return status_do
-
 
 def show_index_view(request, redirecturl, tag_name):
     user=request.user
@@ -82,19 +106,15 @@ def show_index_view(request, redirecturl, tag_name):
         'popular_tag_list':popular_tag_list,
     })
 
-def process_message_form(request, redirecturl, tag_name):
+def process_message_form(request, redirecturl):
     form = AddStatusForm(request.POST)
     user = request.user
     
     if (form.is_valid()):
         message_ = form.cleaned_data['message']
-    else:
-        message_ = None
     
     # Find all hashtags.
     tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message_)
-    
-    print tags
     
     #Save message with primary tag
     primary_tag = None
@@ -111,10 +131,8 @@ def process_message_form(request, redirecturl, tag_name):
     message.save()
         
     process_tags(tags, message, user)
-    
     process_mentions(message)
         
-    return HttpResponseRedirect(redirecturl)
 
 def process_mentions(message):
     mentions = re.findall('@(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message.message)
@@ -126,8 +144,6 @@ def process_tags(tags, message, user):
     for tag in tags:
         try:
             new_tag = Tag.objects.get(name=tag, user=user)
-            if new_tag.type == 'project':
-                print 'project tag found'
         except Tag.DoesNotExist:
             new_tag = Tag(name=tag, user=user, type='user')
             new_tag.save()
@@ -144,3 +160,11 @@ def get_popular_tags(user):
     tags = cursor.fetchall()
     tags = [tag[0].replace('#','') for tag in tags]
     return tags
+
+def process_form(request):
+    # process form if the request is POST
+    if request.method == "POST":
+        form = AddStatusForm(request.POST)
+        if (form.is_valid()):
+            process_message_form(request, request.path)
+            return HttpResponseRedirect(request.path)

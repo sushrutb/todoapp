@@ -46,6 +46,7 @@ class SystemTag(models.Model):
 class SystemTagStatus(models.Model):
     system_tag = models.ForeignKey(SystemTag)
     status = models.TextField()
+    #active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     last_modified= models.DateTimeField(auto_now=True)
 
