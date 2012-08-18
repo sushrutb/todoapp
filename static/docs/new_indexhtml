@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+    <html>
+    <head>
+        <title>my webapp</title>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0;" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <link rel="apple-touch-icon" href="icon.png"/>
+
+        <!-- twitter bootstrap stylesheet -->
+        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+
+        <!-- we need jQuery -->
+        <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+        <!-- we need tabs javascript plugin of twitter bootstrap -->
+        <script src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-tabs.js"></script>
+
+    </head>
+    <body>
+		<!-- MAIN PANEL -->
+		<div class="panel">
+			<!-- panel style is a twitter bootstrap style -->
+
+			<!-- TOP BAR -->
+			<div class="topbar">
+				<div class="topbar-inner">
+					<div class="container-fluid">
+						<a class="brand" href="#">WebAPP</a>
+						<ul class="nav">
+							<li><a href="#">Hello</a></li>
+							<li><a href="#">World</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- SCROLLABLE PANEL -->
+			<div class="scrollable panel">
+				<!-- scrollable and panel styles are new styles -->
+				<!-- here, content -->
+			</div>
+
+		</div>
+    </body>
+    <script>
+
+    </script>
+    </html>

@@ -1,0 +1,60 @@
+footer {
+	margin-top: 20px;
+	background-color: black;
+	color: white;
+}
+
+footer li {
+	margin-left: 10px;
+}
+
+footer a {
+	color: white;
+	text-decoration: none;
+}
+footer a:hover {
+	color: gray;
+	text-decoration: underline;
+}
+
+footer h3 {
+	margin-top: 10px;
+}
+
+body {
+	background-image: url(subtle_dots.png);
+}
+
+.more-message {
+	display: block;
+	position: absolute;
+	top: 20px;
+	left: 90%;
+	width: 15px;
+	height: 15px;
+}
+
+.submit-button {
+	display: block;
+	position: absolute;
+	bottom: 10px;
+	left: 86%;
+}
+
+.panel {
+	overflow: hidden;
+	display: block;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	top: 0;
+	margin-left: auto;
+	margin-right: auto;
+	width: 480px;
+	height: 100%;
+}
+
+.messageArea {
+	max-width:100%;
+	min-width:468px;
+}
+

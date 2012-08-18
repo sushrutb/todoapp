@@ -1,48 +1,69 @@
 {% extends "base.html"%}
 {% block content %}
 {% load bootstrap_tags %}
-<form action="" method="post" class="form-vertical">
-	<!-- {{form|as_bootstrap}}-->
-	{% for field in form %}
-	<div id="div_id_message" class="control-group">
-<!-- 	<label for="id_message" class="control-label required-field">
-                Message
-         </label>-->
-        <div class="controls">
-             {{ field }}
-        </div>
-    </div>
-    {% endfor %}
-	<button type="submit">Submit</button>
-</form>
+<div style="position:relative;">
+	<form action="" method="post" class="form-vertical">
+		{% for field in form %}
+		<div id="div_id_message" class="control-group">
+	        <div class="controls">
+	             {{ field }}
+	        </div>
+	    </div>
+	    {% endfor %}
+		<button type="submit" class="btn btn-primary submit-button">Submit</button>
+	</form>
+</div>
+<hr/>
+
 <div id="messagesDiv">
-{% for message in message_list %}
-	<div class="well" id="messageDisplay">
+	{% for message in message_list %}
+	<div id="messageDisplay" style="position:relative;">
 		{% autoescape off %}{{message.message}}{% endautoescape %}
 		<br/>
-		{% for link_ in message.links %}
-			<a href="/tag/update?tag_id={{message.tag_id}}&new_status={{link_}}&message_id={{message.id}}"><span class="label label-important">{{link_}}</span></a>
-		{% endfor %}
-		<div id="deleteMessage"><a href="/tag/update?tag_id={{message.tag_id}}&new_status=deleted&message_id={{message.id}}"><button class="close">&times;</button></a></div>
+		<div id="options" style="margin-top:10px;">
+			{% for link_ in message.links %}
+			<a href="/tag/update?tag_id={{message.tag_id}}&new_status={{link_}}&message_id={{message.id}}">
+				<span class="label label-info">{{link_}}</span>
+			</a>
+			{% endfor %}
+		</div>
+		<div class="more-message" id="showMore"><span id="moreText" class="label label-important" style="cursor:pointer;" >more</span></div>
+		<div id="more-message-options">
+			<hr/>
+			<a href="/tag/update?tag_id={{message.tag_id}}&new_status=deleted&message_id={{message.id}}"><span class="label label-error">delete</span></a>
+		</div>
 	</div>
-{% endfor %}
+	<hr/>
+	{% endfor %}
+	
+	<span class="btn btn-inverse" style="padding:0px;min-width:100%;height:26px;font-size:18px">Load more</span>
+
 </div>
+<!-- end of message div-->
 {% endblock %}
+
+
 {% block scripts %}
     <script>
-		$(document).ready(function(){ 
+	$(document).ready(function(){ 
+		$(this).find('#messagesDiv #showMore').click(
+		function(){
+			if ($(this).find('#moreText').html() == "more") {
+				$(this).find('#moreText').html("less");
+				
+			} else {
+				$(this).find('#moreText').html("more");
+				
+			}
+			
+			$(this).siblings('#more-message-options').slideToggle('fast');
+		}
 
-			$('#messagesDiv #deleteMessage').hide();
-			$('#messagesDiv #messageDisplay').hover(
-			function(){
-				//alert('In show tag')
-				$(this).find('#deleteMessage').show();
-			},
-			function(){
-				//alert('In hide tag')
-				$(this).find('#deleteMessage').hide();
-			});
-		});
+		);
+
+		$(this).find('#messagesDiv #more-message-options').hide();
+	});
+
 	</script>
 {% endblock %}
 

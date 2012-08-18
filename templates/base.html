@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{seo.title}}</title>
+    <title>Simplycious | Simple way to manage everything</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{seo.description}}">
     
 
     <!-- Le styles -->
     <link rel="shortcut icon" href="{{STATIC_URL}}favicon.ico" >
-    <link href="{{STATIC_URL}}css/bootstrap.css" rel="stylesheet">
-    <link href="{{STATIC_URL}}css/todoapp.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}bootstrap.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}todoapp.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -19,86 +19,67 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     
-    <script src="{{STATIC_URL}}js/jquery.js"></script>
+    <script src="{{STATIC_URL}}jquery.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Courgette' rel='stylesheet' type='text/css'>
+
 	
   </head>
 
-  <body style="margin-left:auto;margin-right:auto;min-height: 100%;">
+  <body>
+  	
+	<div class="panel">
 
-    <div class="navbar navbar-fixed-top" style="margin-left:auto;margin-right:auto">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="#">Todo App</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li class="dropdown">
-              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags <b class="caret"></b></a>
-        		<ul class="dropdown-menu">
-        			{% for popular_tag in popular_tag_list %}
-        			<li><a href="/tag/{{popular_tag}}">#{{popular_tag}}</a></li>
-        			{% endfor %}
-        		</ul>
-              </li>
-              <li class="dropdown">
-              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects <b class="caret"></b></a>
-        		<ul class="dropdown-menu">
-        			{% for project in project_list %}
-        			<li><a href="/project/{{project.name}}">{{project.name}}</a></li>
-        			{% endfor %}
-          			<li><a href="/project/new/">+ Create new</a></li>
-        		</ul>
-              </li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-    
-    <div class="container" style="margin-top: 50px;min-height: 450px">
+		<!-- nav bar -->
+		<div class="navbar" style="min-width:100%;">
+			<div class="navbar-inner" style="border-style:none ;box-shadow:none;">
+				<div class="container-fluid" style="padding:2px;padding-left:5px">
+					<a class="brand" style="padding-left:0px;font-family:Courgette;" href="#">Simplycious</a>
+			          <div class="nav-collapse">
+			            <ul class="nav">
+			              <li class="dropdown">
+			              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags <b class="caret"></b></a>
+			        		<ul class="dropdown-menu">
+			        			{% for popular_tag in popular_tag_list %}
+			        			<li><a href="/tag/{{popular_tag}}">#{{popular_tag}}</a></li>
+			        			{% endfor %}
+			        			<li><a href="/tags/">All</a></li>
+			        		</ul>
+			              </li>
+			              <li class="dropdown">
+			              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects <b class="caret"></b></a>
+			        		<ul class="dropdown-menu">
+			        			{% for project in project_list %}
+			        			<li><a href="/project/{{project.name}}">{{project.name}}</a></li>
+			        			{% endfor %}
+			          			<li><a href="/project/new/">+ Create new</a></li>
+			        		</ul>
+			              </li>
+			            </ul>
+			          </div><!--/.nav-collapse -->
+					<form class="navbar-form pull-left">
+						<input type="text" class="span2" style="width:150px">
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- end nav bar -->
+		<!-- title -->
+		<div>
+			<h3>What's up?</h3>
+			<hr/>
+		</div>
+		
+		<!-- end title -->
 
 	    {% block content %}
 	    {% endblock %}
-    
-	</div> <!-- /container -->
-	<footer>
-		<div class="container" style="max-width: 480px">
-			
-			<div class="span2">
-				<a href="/categories/"><h3>Categories</h3></a>
-				<ul class="unstyled">
-					<li><a href="/category/misc/">Misc</a></li>
-				</ul>
-			</div>
-			{% if user.is_authenticated %}
-			<div class="span2">
-				<h3>{{user.username}}</h3>
-				<ul class="unstyled">
-					<li><a href="/accounts/password/change/">Change password</a></li>
-					<li><a href="/accounts/logout/">Logout</a></li>
-				</ul>
-			</div>
-			{% else %}
-			<div class="span2">
-				<h3>Account</h3>
-				<ul class="unstyled">
-					<li><a href="/accounts/register/">Sign up</a></li>
-					<li><a href="/accounts/login/">Login</a></li>
-					<li><a href="/accounts/password/reset/">Forgot Password</a></li>
-				</ul>
-			</div>
-			{% endif %}
-
-			<div class="span2">
-				<h3>About</h3>
-				<p>Simplycious is a web service which lets you compare and choose software products easily. Please contanct <a href="mailto:info@simplycious.com">info@simplycious.com</a> for any inquiries.</p>
-			</div>
-		</div>
-	</footer>
 
    
+</div>
+   
 
-    <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+    <script src="{{STATIC_URL}}bootstrap.min.js"></script>
     {% block scripts %}
     {% endblock %}
   </body>

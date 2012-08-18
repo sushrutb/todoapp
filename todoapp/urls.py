@@ -1,8 +1,7 @@
 from django.conf.urls import patterns, include, url
-from django.contrib.auth.views import login, logout
-from settings import system_tags
-from django.contrib.auth.models import User
-from todo.models import SystemTag, SystemTagStatus
+from django.contrib.auth.views import logout
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -18,4 +17,4 @@ urlpatterns = patterns('',
                        url(r'', include('social_auth.urls')),
                        (r'^project/', include('project.urls')),
 )
-
+urlpatterns += staticfiles_urlpatterns()

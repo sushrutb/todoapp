@@ -11,11 +11,36 @@
     <!-- Le styles -->
     <link href="../docs/assets/css/bootstrap.css" rel="stylesheet">
     <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
+	  body {
+		background-image: url(subtle_dots.png);
+	  }
+      .more-message {
+		  display:block;
+		  position:absolute;
+		  top:20px;
+		  left:90%;
+		  width:15px;
+		  height:15px;
+  	  }
+  	  .submit-button {
+		  display:block;
+		  position:absolute;
+		  bottom:10px;
+		  left:86%;
+  	  }
+	  .panel {
+            overflow                    : hidden;
+            display                     : block;
+            padding-top                 : 0px;
+            padding-bottom              : 0px;
+            top                         : 0;
+            margin-left: auto;
+            margin-right: auto;
+            width                       : 480px;
+            height: 100%; /* uncomment if desktop */
+        }
     </style>
-    <link href="../docs/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- <link href="../docs/assets/css/bootstrap-responsive.css" rel="stylesheet">-->
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -28,53 +53,82 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../docs/assets/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../docs/assets/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="../docs/assets/ico/apple-touch-icon-57-precomposed.png">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Courgette' rel='stylesheet' type='text/css'>
   </head>
 
-  <body style="max-width:480px;margin-left:auto;margin-right:auto">
+  <body>
+	
+	<div class="panel">
 
-    <div class="navbar navbar-fixed-top" style="max-width:480px;margin-left:auto;margin-right:auto">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">Todo App</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-
-    <div class="container" style="max-width:480px">
-		<form class="form-vertical">
-		  <label>Message</label>
-		  <textarea rows="4" class="span3" placeholder="Type something…"></textarea>
-		  <button type="submit" class="btn">Submit</button>
-		</form>
+		<!-- nav bar -->
+		<div class="navbar" style="min-width:100%;">
+			<div class="navbar-inner" style="border-style:none ;box-shadow:none;">
+				<div class="container-fluid" style="padding:2px;padding-left:5px">
+					<a class="brand" style="padding-left:0px;font-family:Courgette;" href="#">Simplycious</a>
+					<ul class="nav">
+						<li><a href="#">Tags</a></li>
+						<li><a href="#">Projects</a></li>
+					</ul>
+					<form class="navbar-form pull-left">
+						<input type="text" class="span2" style="width:150px">
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- end nav bar -->
+    
+		<!-- title -->
+		<div>
+			<h3>What's up?</h3>
+			<hr/>
+		</div>
 		
+		<!-- end title -->
+		<!-- message form -->
+		<div style="position:relative;">
+			<form class="form-vertical">
+			  <textarea rows="4" class="span3" placeholder="Type something…" style="max-width:100%;min-width:468px"></textarea>
+			  <button type="submit" class="btn btn-primary submit-button">Submit</button>
+			</form>
+		</div>
+		<hr/>
+		<!-- end message form -->
 		<div id="messagesDiv">
-		<div class="well" id="messageDisplay">
-			<a href="http://127.0.0.1:8000/tag/expenses">#expenses</a> something.
-			<br/>
-			<span class="label label-important">reimbursed</span>
-			<div id="deleteMessage"><button class="close">&times;</button></div>
-		</div>
-		<div class="well" id="messageDisplay">
-			<a href="http://127.0.0.1:8000/tag/expenses">#expenses</a> something.
-			<br/>
-			<span class="label label-important">reimbursed</span>
-			<div id="deleteMessage"><button class="close">&times;</button></div>
-		</div>
-		</div>
+			<div id="messageDisplay" style="position:relative;">
+				<a href="http://127.0.0.1:8000/tag/expenses">#expenses</a> something.
+				<br/>
+				<div id="options" style="margin-top:10px;"><span class="label label-info">reimbursed</span></div>
+				<div class="more-message" id="showMore"><span id="moreText" class="label label-important" style="cursor:pointer;" >more</span></div>
+				<div id="more-message-options">
+					<hr/>
+					<span class="label label-error">delete</span>
+					<span class="label label-important">Option2</span>
+					<span class="label label-important">Option3</span>
+				</div>
+			</div>
+			<hr/>
+			<div id="messageDisplay" style="position:relative;">
+				<a href="http://127.0.0.1:8000/tag/expenses">#expenses</a> something.
+				<br/>
+				<div id="options" style="margin-top:10px;"><span class="label label-info">reimbursed</span></div>
+				<div class="more-message" id="showMore"><span id="moreText" class="label label-important" style="cursor:pointer;" >more</span></div>
+				<div id="more-message-options">
+					<hr/>
+					<span class="label label-error">delete</span>
+					<span class="label label-important">Option2</span>
+					<span class="label label-important">Option3</span>
+				</div>
+			</div>
+			<hr/>
+			
+			<span class="btn btn-inverse" style="padding:0px;min-width:100%;height:26px;font-size:18px">Load more</span>
 
-    </div> <!-- /container -->
+		</div>
+		<!-- end of message div-->
+    
+    
+  </div>
 
     <!-- Le javascript
     ================================================== -->
@@ -82,15 +136,22 @@
     <script src="../docs/assets/js/jquery.js"></script>
     <script>
 		$(document).ready(function(){ 
+			$(this).find('#messagesDiv #showMore').click(
+			function(){
+				if ($(this).find('#moreText').html() == "more") {
+					$(this).find('#moreText').html("less");
+					
+				} else {
+					$(this).find('#moreText').html("more");
+					
+				}
+				
+				$(this).siblings('#more-message-options').slideToggle('fast');
+			}
 
-			$(this).find('#messagesDiv #deleteMessage').hide();
-			$('#messagesDiv #messageDisplay').hover(
-			function(){
-				$(this).find('#deleteMessage').show();
-			},
-			function(){
-				$(this).find('#deleteMessage').hide();
-			});
+			);
+
+			$(this).find('#messagesDiv #more-message-options').hide();
 		});
 	</script>
   </body>
