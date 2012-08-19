@@ -1,0 +1,23 @@
+<!-- footer -->
+<hr/>
+<footer>
+	<div class="container">
+		<div class="span2">
+			<h3>Account</h3>
+			<ul class="unstyled">
+			{% if user.is_authenticated %}
+				<li><a href="http://127.0.0.1:8000/accounts/password/change/">Change password</a></li>
+				<li><a href="http://127.0.0.1:8000/accounts/logout/">Logout</a></li>
+			{% else %}
+				<li><a href="/accounts/register">Sign up</a></li>
+				<li><a href="/accounts/password/reset/">Forgot password</a></li>
+			{% endif %}
+				<li><a href="/help/">Help</a></li>
+			</ul>
+		</div>
+		<div class="span3 offset1">
+			<h3>About</h3>
+			<p>Simplycious easiest way to organize information and tasks.</p>
+		</div>
+	</div>
+</footer>

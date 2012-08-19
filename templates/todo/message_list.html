@@ -1,0 +1,19 @@
+{% for message in message_list %}
+<div id="messageDisplay" style="position:relative;">
+	{% autoescape off %}{{message.message}}{% endautoescape %}
+	<br/>
+	<div id="options" style="margin-top:10px;">
+		{% for link_ in message.links %}
+		<a href="/tag/update?tag_id={{message.tag_id}}&new_status={{link_}}&message_id={{message.id}}">
+			<span class="label label-info">{{link_}}</span>
+		</a>
+		{% endfor %}
+	</div>
+	<div class="more-message" id="showMore"><span id="moreText" class="label label-important" style="cursor:pointer;" >more</span></div>
+	<div id="more-message-options">
+		<hr/>
+		<a href="/tag/update?tag_id={{message.tag_id}}&new_status=deleted&message_id={{message.id}}"><span class="label label-error">delete</span></a>
+	</div>
+</div>
+<hr/>
+{% endfor %}

@@ -57,23 +57,20 @@
 			              </li>
 			            </ul>
 			          </div><!--/.nav-collapse -->
-					<form class="navbar-form pull-left">
-						<input type="text" class="span2" style="width:150px">
+					<form class="navbar-form pull-left" action="/search/" method="get">
+						<input type="text" class="span2" id="query" name="query" style="width:150px">
+						<input type="submit" style="display:none"/>
 					</form>
 				</div>
 			</div>
 		</div>
 		<!-- end nav bar -->
-		<!-- title -->
-		<div>
-			<h3>What's up?</h3>
-			<hr/>
-		</div>
-		
-		<!-- end title -->
+		{% block title %}
+		{% endblock %}
 
 	    {% block content %}
 	    {% endblock %}
+	    {% include "footer.html" %}
 
    
 </div>
