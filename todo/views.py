@@ -7,8 +7,8 @@ from project.models import ProjectUser
 from django.utils.safestring import mark_safe
 from django.db import connection
 import re
+from todoapp.settings import page_length
 
-page_length = 5
 
 @login_required
 def search(request):
@@ -66,14 +66,15 @@ def index(request):
     
 @login_required
 def update_status(request):
-    message_id = request.GET.get('message_id', '')
+    message_id = request.GET.get('message_id', 1)
     new_status = request.GET.get('new_status', '')
     
-    
-    message = Message.objects.get(id=message_id)
+    print message_id
+    message = Message.objects.get(id=long(message_id))
     message.status = new_status
     message.save()
-    return HttpResponseRedirect(request.path)
+    print request.path
+    return HttpResponseRedirect("/")
 
 def format_message(message):
     status_do = StatusDO()
