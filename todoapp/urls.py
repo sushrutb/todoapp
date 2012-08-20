@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib.auth.views import logout
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import settings
 
 
 # Uncomment the next two lines to enable the admin:
@@ -17,5 +18,6 @@ urlpatterns = patterns('',
                        (r'^accounts/', include('registration.backends.default.urls')),
                        url(r'', include('social_auth.urls')),
                        (r'^project/', include('project.urls')),
+                       (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.STATIC_URL + 'favicon.ico'}),
 )
 urlpatterns += staticfiles_urlpatterns()

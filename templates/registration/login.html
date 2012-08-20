@@ -7,7 +7,7 @@
 	<form class="form-vertical" action="?next={{ next|default:"/" }}" method="post" style="margin-top: 20px">
 	    {% csrf_token %}
 	    {{ form|as_bootstrap}}
-	    <div class="form-actions">
+	    <div>
 	      <button type="submit" class="btn btn-primary">Login</button>
 	    </div>
 	</form>

@@ -1,6 +1,8 @@
 {% for message in message_list %}
 <div id="messageDisplay" style="position:relative;">
-	{% autoescape off %}{{message.message}}{% endautoescape %}
+	<div style="max-width:425px">
+	{% autoescape off %}{{message.message|urlize}}{% endautoescape %}
+	</div>
 	<br/>
 	<div id="options" style="margin-top:10px;">
 		{% for link_ in message.links %}
