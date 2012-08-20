@@ -21,6 +21,6 @@ STATIC_URL = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = DEFAULT_FILE_STORAGE
 AWS_HEADERS = {
-#'Expires': 'Mon, 20 Aug 2012 20:00:00 GMT',
+'Expires': 'Wed, 22 Aug 2012 20:00:00 GMT',
 'Cache-Control': 'max-age=86400',
 }
