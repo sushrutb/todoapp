@@ -24,3 +24,8 @@ AWS_HEADERS = {
 'Expires': 'Wed, 22 Aug 2012 20:00:00 GMT',
 'Cache-Control': 'max-age=86400',
 }
+GZIP_CONTENT_TYPES =  (
+    'text/css',
+    'application/javascript',
+    'application/x-javascript',
+)
