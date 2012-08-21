@@ -131,11 +131,11 @@ def format_message(message):
 
     status_do.id = message.id
     message_tags = MessageTag.objects.filter(message=message)
-    status_do.message = message.message
+    status_do.message  = message.message + ' '
     for message_tag in message_tags:
-        status_do.message = status_do.message.replace(message_tag.tag.name, '<a href="/tag/' + message_tag.tag.name.replace('#', '') + '">' + message_tag.tag.name + '</a>')
+        status_do.message = status_do.message.replace(message_tag.tag.name+' ', '<a href="/tag/' + message_tag.tag.name.replace('#', '') + '">' + message_tag.tag.name + '</a>' + ' ')
         mark_safe(status_do.message)
-        
+    status_do.message = status_do.message.strip()    
     return status_do
 
 def show_index_view(request, redirecturl, tag_name):
@@ -171,6 +171,7 @@ def process_message_form(request, redirecturl):
     
     if (form.is_valid()):
         message_ = form.cleaned_data['message']
+        #message_ = message_ + ' '
     
     # Find all hashtags.
     tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message_)
