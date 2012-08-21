@@ -1,1 +1,1 @@
-web: newrelic-admin run-program gunicorn todoapp.wsgi -b 0.0.0.0:$PORT
+web: gunicorn todoapp.wsgi -b 0.0.0.0:$PORT
