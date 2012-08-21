@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from forms import AddStatusForm
@@ -9,10 +9,33 @@ from django.db import connection
 import re
 from todoapp.settings import page_length
 
+@login_required
+def edit_message(request, message_id):
+    user = request.user
+    message = get_object_or_404(Message, pk=long(message_id))
+    if request.method == "POST":
+        form = AddStatusForm(request.POST)
+        if (form.is_valid()):
+            MessageTag.objects.filter(message=message).delete()
+            message.delete() 
+            process_message_form(request, "/")
+            return HttpResponseRedirect("/")
+
+    project_list = get_project_list(user)
+    popular_tag_list = get_popular_tags(user)
+    form = AddStatusForm(initial={'message': message.message})
+    
+    return render(request, 'todo/edit_message.html', {
+        'form': form,
+        'project_list':project_list,
+        'popular_tag_list':popular_tag_list,
+    })
+    
+@login_required
 def get_tags(request):
     user = request.user
     tag_list = Tag.objects.filter(user=user).order_by('name')
-    tag_list = [(tag.name.replace('#',''),) for tag in tag_list]
+    tag_list = [(tag.name.replace('#', ''),) for tag in tag_list]
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
     return render(request, 'todo/tags.html', {
@@ -29,7 +52,7 @@ def search(request):
     page = int(request.GET.get('page', '1'))
     query = request.GET.get('query', None)
     print query
-    message_list = Message.objects.filter(user=user,message__icontains=query).order_by('-last_modified')[:page_length * page]
+    message_list = Message.objects.filter(user=user, message__icontains=query).order_by('-last_modified')[:page_length * page]
     print len(message_list)
     message_list = [format_message(message) for message in message_list]
     project_list = get_project_list(user)
@@ -39,19 +62,19 @@ def search(request):
         'message_list':message_list,
         'project_list':project_list,
         'popular_tag_list':popular_tag_list,
-        'page':page+1,
+        'page':page + 1,
     })
 
 @login_required    
 def get_tag_view(request, tag_name):
     page = int(request.GET.get('page', '1'))
-    tag = Tag.objects.get(user=request.user, name='#'+tag_name)
-    user=request.user
+    tag = Tag.objects.get(user=request.user, name='#' + tag_name)
+    user = request.user
     process_form(request)
     message_tag_list = MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').order_by('-last_modified')[:5 * page]
     
     message_list = [format_message(message_tag.message) for message_tag in message_tag_list]
-    form = AddStatusForm(initial={'message':'#'+tag_name + ' '})
+    form = AddStatusForm(initial={'message':'#' + tag_name + ' '})
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
     return render(request, 'todo/index.html', {
@@ -59,14 +82,14 @@ def get_tag_view(request, tag_name):
         'message_list':message_list,
         'project_list':project_list,
         'popular_tag_list':popular_tag_list,
-        'page':page+1,
+        'page':page + 1,
     })
 
        
 @login_required
 def index(request):
     page = int(request.GET.get('page', '1'))
-    user=request.user
+    user = request.user
     process_form(request)
     message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')[:5 * page]]
     project_list = get_project_list(user)
@@ -76,7 +99,7 @@ def index(request):
         'message_list':message_list,
         'project_list':project_list,
         'popular_tag_list':popular_tag_list,
-        'page':page+1,
+        'page':page + 1,
     })
     
 @login_required
@@ -114,7 +137,7 @@ def format_message(message):
     return status_do
 
 def show_index_view(request, redirecturl, tag_name):
-    user=request.user
+    user = request.user
     
     # process form if the request is POST
     if request.method == "POST":
@@ -152,7 +175,7 @@ def process_message_form(request, redirecturl):
     
     #Save message with primary tag
     primary_tag = None
-    if tags is not None and len(tags)>0:
+    if tags is not None and len(tags) > 0:
         primary_tag_name = tags[0]
         try:
             primary_tag = Tag.objects.get(name=primary_tag_name, user=user)
@@ -190,9 +213,9 @@ def get_project_list(user):
 
 def get_popular_tags(user):
     cursor = connection.cursor()
-    cursor.execute("select name from todo_tag where todo_tag.id in (select primary_tag_id from todo_message where user_id = %s and primary_tag_id not in (select id from todo_tag where user_id = %s and type='project') group by primary_tag_id order by count(*) desc)",[user.id, user.id])
+    cursor.execute("select name from todo_tag where todo_tag.id in (select primary_tag_id from todo_message where user_id = %s and primary_tag_id not in (select id from todo_tag where user_id = %s and type='project') group by primary_tag_id order by count(*) desc)", [user.id, user.id])
     tags = cursor.fetchall()
-    tags = [tag[0].replace('#','') for tag in tags]
+    tags = [tag[0].replace('#', '') for tag in tags]
     return tags
 
 def process_form(request):

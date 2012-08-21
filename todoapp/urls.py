@@ -11,6 +11,8 @@ import settings
 urlpatterns = patterns('',
                        # shows list of products, ordered by recently added.
                        url(r'^$', 'todo.views.index'),
+                       url(r'^message/(?P<message_id>[-\w]+)/edit/$', 'todo.views.edit_message'),
+                       url(r'^message/(?P<message_id>[-\w]+)/$', 'todo.views.view_message'),
                        url(r'^tag/update', 'todo.views.update_status'),
                        url(r'^tags/$', 'todo.views.get_tags'),
                        url(r'^tag/(?P<tag_name>[-\w]+)/$', 'todo.views.get_tag_view'),
