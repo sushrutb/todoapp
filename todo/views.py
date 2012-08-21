@@ -13,13 +13,14 @@ from todoapp.settings import page_length
 def edit_message(request, message_id):
     user = request.user
     message = get_object_or_404(Message, pk=long(message_id))
+    next_page = request.GET.get('next', '/')
     if request.method == "POST":
         form = AddStatusForm(request.POST)
         if (form.is_valid()):
             MessageTag.objects.filter(message=message).delete()
             message.delete() 
             process_message_form(request, "/")
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect(next_page)
 
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
@@ -106,13 +107,14 @@ def index(request):
 def update_status(request):
     message_id = request.GET.get('message_id', 1)
     new_status = request.GET.get('new_status', '')
+    next_page = request.GET.get('next', '/')
     
     print message_id
     message = Message.objects.get(id=long(message_id))
     message.status = new_status
     message.save()
     print request.path
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(next_page)
 
 def format_message(message):
     status_do = StatusDO()
