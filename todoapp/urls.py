@@ -15,12 +15,14 @@ urlpatterns = patterns('',
                        #url(r'^message/(?P<message_id>[-\w]+)/$', 'todo.views.view_message'),
                        url(r'^tag/update', 'todo.views.update_status'),
                        url(r'^tags/$', 'todo.views.get_tags'),
+                       url(r'^help/$', 'todo.views.view_help'),
                        url(r'^tag/(?P<tag_name>[-\w]+)/$', 'todo.views.get_tag_view'),
                        url(r'^search/$', 'todo.views.search'),
                        (r'^accounts/logout/$', logout, {'next_page': '/'}),
                        (r'^accounts/', include('registration.backends.default.urls')),
                        url(r'', include('social_auth.urls')),
                        (r'^project/', include('project.urls')),
+                       
                        (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.STATIC_URL + 'favicon.ico'}),
 )
 urlpatterns += staticfiles_urlpatterns()

@@ -9,6 +9,9 @@ from django.db import connection
 import re
 from todoapp.settings import page_length
 
+def view_help(request):
+    return render(request, 'help.html', {})
+    
 @login_required
 def edit_message(request, message_id):
     user = request.user
