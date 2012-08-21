@@ -18,7 +18,7 @@ def edit_message(request, message_id):
         form = AddStatusForm(request.POST)
         if (form.is_valid()):
             MessageTag.objects.filter(message=message).delete()
-            message.delete() 
+            message.delete()
             process_message_form(request, "/")
             return HttpResponseRedirect(next_page)
 
