@@ -12,6 +12,7 @@ urlpatterns = patterns('',
                        # shows list of products, ordered by recently added.
                        url(r'^$', 'todo.views.index'),
                        url(r'^tag/update', 'todo.views.update_status'),
+                       url(r'^tags/$', 'todo.views.get_tags'),
                        url(r'^tag/(?P<tag_name>[-\w]+)/$', 'todo.views.get_tag_view'),
                        url(r'^search/$', 'todo.views.search'),
                        (r'^accounts/logout/$', logout, {'next_page': '/'}),
