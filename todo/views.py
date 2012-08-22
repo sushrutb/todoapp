@@ -75,7 +75,7 @@ def get_tag_view(request, tag_name):
     tag = Tag.objects.get(user=request.user, name='#' + tag_name)
     user = request.user
     process_form(request)
-    message_tag_list = MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').order_by('-last_modified')[:5 * page]
+    message_tag_list = MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').order_by('-last_modified')[:page_length * page]
     
     message_list = [format_message(message_tag.message) for message_tag in message_tag_list]
     form = AddStatusForm(initial={'message':'#' + tag_name + ' '})
@@ -95,7 +95,7 @@ def index(request):
     page = int(request.GET.get('page', '1'))
     user = request.user
     process_form(request)
-    message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')[:5 * page]]
+    message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')[:page_length * page]]
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
     return render(request, 'todo/index.html', {
