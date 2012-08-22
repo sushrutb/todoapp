@@ -17,3 +17,4 @@ pyes==0.19.1
 python-openid==2.2.5
 requests==0.13.7
 wsgiref==0.1.2
+newrelic
