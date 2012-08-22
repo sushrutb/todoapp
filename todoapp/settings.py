@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     'storages',
     'django_forms_bootstrap',
     'south',
+    'django.contrib.admin',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -209,4 +210,4 @@ system_tags = {
 #                "#invoice": ('sent','received'),
 #                "diary":None,
                 }
-page_length = 5
+page_length = 20
