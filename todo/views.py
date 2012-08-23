@@ -9,6 +9,19 @@ from django.db import connection
 import re
 from todoapp.settings import page_length
 
+@login_required
+def new_message(request):
+    form = AddStatusForm(initial={'message': '#'+request.GET.get('tag','bookmark ')+' ' + request.GET.get('url','')})
+    if request.method == "POST":
+        form = AddStatusForm(request.POST)
+        if (form.is_valid()):
+            process_message_form(request, "/")
+            return HttpResponseRedirect(request.GET.get('url','/'))
+        
+    return render(request, 'todo/new_message.html', {
+        'form': form,
+    })
+    
 def view_help(request):
     return render(request, 'help.html', {})
     
@@ -178,11 +191,12 @@ def process_message_form(request, redirecturl):
     
     # Find all hashtags.
     tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message_)
-    
+    print message_
     #Save message with primary tag
     primary_tag = None
     if tags is not None and len(tags) > 0:
         primary_tag_name = tags[0]
+        print 'primary tag >> ' + primary_tag_name
         try:
             primary_tag = Tag.objects.get(name=primary_tag_name, user=user)
         except Tag.DoesNotExist:
