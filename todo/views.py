@@ -11,13 +11,14 @@ from todoapp.settings import page_length
 
 @login_required
 def new_message(request):
-    form = AddStatusForm(initial={'message': '#'+request.GET.get('tag','bookmark ')+' ' + request.GET.get('url','')})
+    
     if request.method == "POST":
         form = AddStatusForm(request.POST)
         if (form.is_valid()):
             process_message_form(request, "/")
             return HttpResponseRedirect(request.GET.get('url','/'))
         
+    form = AddStatusForm(initial={'message': '#'+request.GET.get('tag','bookmark ')+' ' + request.GET.get('url','')})    
     return render(request, 'todo/new_message.html', {
         'form': form,
     })

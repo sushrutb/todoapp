@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplycious | Simple way to manage everything</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{seo.description}}">
+    
+
+    <!-- Le styles -->
+    <link rel="shortcut icon" href="{{STATIC_URL}}favicon.ico" >
+    <link href="{{STATIC_URL}}bootstrap.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}todoapp.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    
+    <script src="{{STATIC_URL}}jquery.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Courgette' rel='stylesheet' type='text/css'>
+    
+
+	
+  </head>
+
+  <body>
+  	
+	<div class="wiki-panel">
+
+		<!-- nav bar -->
+		<div class="navbar" style="min-width:100%;">
+			<div class="navbar-inner" style="border-style:none ;box-shadow:none;">
+				<div class="container-fluid" style="padding:2px;padding-left:5px">
+					<a class="brand" style="padding-left:0px;font-family:Courgette;" href="/">Simplycious</a>
+					{% if user.is_authenticated %}
+			          <div class="nav-collapse">
+			            <ul class="nav">
+			              <li class="dropdown">
+			              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags <b class="caret"></b></a>
+			        		<ul class="dropdown-menu">
+			        			{% for popular_tag in popular_tag_list %}
+			        			<li><a href="/tag/{{popular_tag}}">#{{popular_tag}}</a></li>
+			        			{% endfor %}
+			        			<li><a href="/tags/">All</a></li>
+			        		</ul>
+			              </li>
+			            </ul>
+			          </div><!--/.nav-collapse -->
+					<form class="navbar-form pull-left" action="/search/" method="get">
+						<input type="text" class="span2" id="query" name="query" style="width:150px" placeholder="Search...">
+						<input type="submit" style="display:none"/>
+					</form>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+		<hr/>
+		<!-- end nav bar -->
+		
+		<!-- Main content -->
+		<div class="row" style="min-height:400px">
+			<!-- sidebar -->
+			<div class="span3" style="border-right: 1px solid gray;margin-right:40px;margin-left:40px;min-height:400px">
+				<ul>
+					{% for tag_ in tag_list %}
+					{% ifequal tag_ 'ul' %}
+					<ul>
+					{% else %}
+						{% ifequal tag_ '/ul' %}
+						</ul>
+						{% else %}
+							{% ifequal tag_ 'li' %}
+							<li>
+							{% else %}
+								{% ifequal tag_ '/li' %}
+									</li>
+								{% else %}
+									{{tag_}}
+								{% endifequal %}
+							{% endifequal %}
+						{% endifequal %}
+					{% endifequal %}
+					{% endfor %}
+				</ul>
+			</div>
+			<!-- end of side bar -->
+			<!-- content -->
+			<div class="span6">
+				<!-- form div -->
+				<div>
+					{% load bootstrap_tags %}
+					{% include "todo/message_form.html" with form=form %}
+				</div>
+				{% if message_list %}
+				<div id="messagesDiv">
+					{% include "todo/message_list.html" with message_list=message_list %}
+					<a href="{{request.path}}?page={{page}}"><span class="btn btn-inverse" style="padding:0px;min-width:468px;height:26px;font-size:18px">Load more</span></a>
+				</div>
+				{% else %}
+					<p style="font-size: 20px;height: 100px;min-height: 100px;text-align: center;vertical-align: middle">Sorry, no messages found. </p>
+				{% endif %}
+			</div>
+			<!-- end of content -->
+		</div>
+
+	    {% include "footer.html" %}
+	</div>
+
+   <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-33112694-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+	</script>
+
+    <script src="{{STATIC_URL}}bootstrap.min.js"></script>
+    
+        <script>
+	$(document).ready(function(){ 
+		$(this).find('#messagesDiv #showMore').click(
+		function(){
+			if ($(this).find('#moreText').html() == "more") {
+				$(this).find('#moreText').html("less");
+				
+			} else {
+				$(this).find('#moreText').html("more");
+				
+			}
+			
+			$(this).siblings('#more-message-options').slideToggle('fast');
+		}
+
+		);
+
+		$(this).find('#messagesDiv #more-message-options').hide();
+	});
+
+	</script>
+
+  </body>
+</html>

@@ -115,6 +115,7 @@ INSTALLED_APPS = (
     'gunicorn',
     'todo',
     'project',
+    'wiki',
     'social_auth',
     'registration',
     'django.contrib.sites',

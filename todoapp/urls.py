@@ -23,6 +23,7 @@ urlpatterns = patterns('',
                        (r'^accounts/', include('registration.backends.default.urls')),
                        url(r'', include('social_auth.urls')),
                        (r'^project/', include('project.urls')),
+                       (r'^wiki/', include('wiki.urls')),
                        url(r'^admin/', include(admin.site.urls)),
                        (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.STATIC_URL + 'favicon.ico'}),
 )
