@@ -103,8 +103,8 @@ def strip_message_list(message_list, process_tag):
 def filter_message_list(message_list, process_tag):
     new_message_list = []
     for message in message_list:
-        if process_tag in message:
-            new_message_list.append(message)
+        #if process_tag in message:
+        new_message_list.append(message)
 
     return new_message_list
 
@@ -139,10 +139,10 @@ def mod_rec_process_messages2(message_list, process_tag):
         tag_data.append(process_tag)
         tag_data.append('/li')
         return tag_data
-    tag_data.append('ul')
     tag_data.append('li')
     tag_data.append(process_tag)
     tag_data.append('/li')
+    tag_data.append('ul')
     for final_tag in final_tags.keys():
         if final_tags[final_tag] == True:
             subtags = mod_rec_process_messages2(message_list, final_tag)
