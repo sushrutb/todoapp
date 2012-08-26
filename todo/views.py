@@ -61,7 +61,6 @@ def get_tags(request):
         'project_list':project_list,
         'popular_tag_list':popular_tag_list,
         'tag_list':tag_list,
-        #'page':page+1,
     })
 
 @login_required
@@ -69,9 +68,7 @@ def search(request):
     user = request.user
     page = int(request.GET.get('page', '1'))
     query = request.GET.get('query', None)
-    print query
     message_list = Message.objects.filter(user=user, message__icontains=query).order_by('-last_modified')[:page_length * page]
-    print len(message_list)
     message_list = [format_message(message) for message in message_list]
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)

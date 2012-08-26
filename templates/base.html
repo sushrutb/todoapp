@@ -32,44 +32,7 @@
 	<div class="panel">
 
 		<!-- nav bar -->
-		<div class="navbar" style="min-width:100%;">
-			<div class="navbar-inner" style="border-style:none ;box-shadow:none;">
-				<div class="container-fluid" style="padding:2px;padding-left:5px">
-					<a class="brand" style="padding-left:0px;font-family:Courgette;" href="/">Simplycious</a>
-					{% if user.is_authenticated %}
-			          <div class="nav-collapse">
-			            <ul class="nav">
-			              <li class="dropdown">
-			              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags <b class="caret"></b></a>
-			        		<ul class="dropdown-menu">
-			        			{% for popular_tag in popular_tag_list %}
-			        			<li><a href="/tag/{{popular_tag}}">#{{popular_tag}}</a></li>
-			        			{% endfor %}
-			        			<li><a href="/tags/">All</a></li>
-			        		</ul>
-			              </li>
-			              <!-- removed projects for a while.
-			              <li class="dropdown">
-			              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects <b class="caret"></b></a>
-			        		<ul class="dropdown-menu">
-			        			{% for project in project_list %}
-			        			<li><a href="/project/{{project.name}}">{{project.name}}</a></li>
-			        			{% endfor %}
-			          			<li><a href="/project/new/">+ Create new</a></li>
-			        		</ul>
-			              </li>
-			              -->
-			            </ul>
-			          </div><!--/.nav-collapse -->
-					<form class="navbar-form pull-left" action="/search/" method="get">
-						<input type="text" class="span2" id="query" name="query" style="width:150px" placeholder="Search...">
-						<input type="submit" style="display:none"/>
-					</form>
-				</div>
-				{% endif %}
-			</div>
-		</div>
-		<hr/>
+		{% include "nav_bar.html"%}
 		<!-- end nav bar -->
 		{% block title %}
 		{% endblock %}
@@ -79,7 +42,8 @@
 	    {% include "footer.html" %}
 
    
-</div>
+	</div>
+	
    <script type="text/javascript">
 
   var _gaq = _gaq || [];

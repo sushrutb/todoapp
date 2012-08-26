@@ -1,20 +1,19 @@
 # Create your views here.
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from todo.forms import AddStatusForm
-from todo.models import Message, Mention, Tag, MessageTag, SystemTagStatus, SystemTag, StatusDO
-from project.models import ProjectUser
-from django.utils.safestring import mark_safe
-from django.db import connection
+from todo.models import Tag, MessageTag, Message
 import re
 from todoapp.settings import page_length
 from todo.views import process_message_form, get_popular_tags, get_project_list, format_message
+from django.db import connection
 
 @login_required
 def show_wiki(request):
     
-    #process form
+    page = int(request.GET.get('page', '1'))
+    
     if request.method == 'POST':
         if request.method == "POST":
             form = AddStatusForm(request.POST)
@@ -23,13 +22,45 @@ def show_wiki(request):
                 return HttpResponseRedirect(request.path)
             
     main_tag = '#wiki'
-    wiki_tag = Tag.objects.filter(user=request.user, name='#wiki')
+    wiki_tag = Tag.objects.get(user=request.user, name='#wiki')
     message_list = [message_tag.message.message for message_tag in MessageTag.objects.filter(tag=wiki_tag)]
     tag_data = mod_rec_process_messages2(message_list, main_tag)
-    print tag_data
-    message_tag_list = MessageTag.objects.filter(tag=wiki_tag).exclude(message__status='deleted').order_by('-last_modified')
+    tag_data = tag_data[4:len(tag_data)-2]
     
+    tag_data = add_links(tag_data)
+    #print tag_data
+    
+    message_tag_list = MessageTag.objects.filter(tag=wiki_tag).exclude(message__status='deleted').order_by('-last_modified')[:page_length * page]
     message_list = [format_message(message_tag.message) for message_tag in message_tag_list]
+    
+    
+    filter_tags = request.GET.getlist('tag')
+    if filter_tags is not None and len(filter_tags)>0:
+        cursor = connection.cursor()
+        cursor.execute("select message_id from todo_messagetag where tag_id = %s", wiki_tag.id)
+        message_id_list = set(cursor.fetchall())
+        
+        for filter_tag in filter_tags:
+            filter_tag = Tag.objects.get(name='#'+filter_tag, user=request.user)
+            cursor = connection.cursor()
+            cursor.execute("select message_id from todo_messagetag where tag_id = %s", filter_tag.id)
+            message_ids = set(cursor.fetchall())
+            message_id_list = message_id_list.intersection(message_ids)
+            
+        message_id_list = [id_[0] for id_ in message_id_list]
+        print message_id_list
+            
+        message_list = Message.objects.filter(id__in=message_id_list).exclude(status='deleted').order_by('-last_modified')[:page_length * page]
+        message_list = [format_message(message) for message in message_list]
+        if Message.objects.filter(id__in=message_id_list).exclude(status='deleted').order_by('-last_modified').count() > page_length*page:
+            last_page = False
+        else:
+            last_page = True
+    else:
+        if MessageTag.objects.filter(tag=wiki_tag).exclude(message__status='deleted').count() > page_length*page:
+            last_page = False
+        else:
+            last_page = True
 
     return render(request, 'wiki/wiki_view.html', {
         'form': AddStatusForm(),
@@ -37,8 +68,38 @@ def show_wiki(request):
         'popular_tag_list':get_popular_tags(request.user),
         'tag_list':tag_data,
         'message_list':message_list,
+        'last_page':last_page,
     })
     
+def add_links(tag_data):
+    new_tag_data = []
+    curr_link = ''
+    links = []
+    for tag_ in tag_data:
+        tuple_data = [tag_]
+        if tag_ == 'ul':
+            links.append(curr_link)
+            new_tag_data.append(tuple_data)
+        elif tag_ == '/ul':
+            links = links[:len(links)-1]
+            new_tag_data.append(tuple_data)
+        elif tag_ == 'li':
+            new_tag_data.append(tuple_data)
+        elif tag_ == '/li':
+            new_tag_data.append(tuple_data)
+        else:
+            curr_link = tag_.replace('#','')
+            if len(links) > 0:
+                link_str = ''
+                for link_ in links:
+                    link_str += '&tag=' + link_
+                tuple_data.append(link_str+'&tag='+curr_link)
+            else:
+                tuple_data.append('&tag='+curr_link)
+            new_tag_data.append(tuple_data)
+        
+    return new_tag_data 
+        
 def process_messages(message_list):
     tag_data = {}
     tag_counters = {}
