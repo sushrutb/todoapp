@@ -33,9 +33,9 @@
 		<!-- end nav bar -->
 		
 		<!-- Main content -->
-		<div class="row" style="min-height:400px">
+		<div class="row" style="min-height:400px" id="wikiViewDiv">
 			<!-- sidebar -->
-			<div class="span3" style="margin-left:40px;min-height:400px">
+			<div class="span3" id="wiki-sidebar">
 				<ul>
 					{% for tag_ in tag_list %}
 					{% ifequal tag_.0 'ul' %}
@@ -65,25 +65,28 @@
 			</div>
 			<!-- end of side bar -->
 			<!-- content -->
-			<div class="span6" style="border-left: 1px solid gray;padding-left:40px;">
+			<div class="span8" style="border-left: 1px outset lightgray;padding-left:40px;min-height:400px;min-width: 500px;">
 				<!-- form div -->
-				<div>
+				<div id="wiki-message-form">
 					{% load bootstrap_tags %}
 					{% include "todo/message_form.html" with form=form %}
 				</div>
 				{% if message_list %}
 				<div id="messagesDiv">
+					<div style="min-height:250px;min-width: 500px">
 					{% include "todo/message_list.html" with message_list=message_list %}
+					</div>
 					{% ifequal last_page True %}
 					<a href="{{request.path}}?page={{page}}">
 					{% endifequal %}
-						<span class="btn btn-inverse" style="padding:0px;min-width:468px;height:26px;font-size:18px">Load more</span>
+						<span class="btn btn-inverse wiki-load-more">Load more</span>
 					{% ifequal last_page True %}
 					</a>
 					{% endifequal %}
 				</div>
 				{% else %}
-					<p style="font-size: 20px;height: 100px;min-height: 100px;text-align: center;vertical-align: middle">Sorry, no messages found. </p>
+					<p class="wiki-p">Sorry, no messages found. </p>
+					<p class="wiki-p">All messages with <span style="text-decoration: underline;font-style:italic;background-color: lightgray;padding-right:10px;padding-left: 10px;">#wiki</span> tag are added automatically to wiki.</p>
 				{% endif %}
 			</div>
 			<!-- end of content -->

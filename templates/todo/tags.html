@@ -9,16 +9,19 @@
 {% block content %}
 {% load bootstrap_tags %}
 
+<div id="normal-message-form">
 {% include "todo/message_form.html" with form=form %}
-<hr/>
-<div class="container">
-<div id="tagList">
-	{% for tag in tag_list %}
-	<div class="span2">
-		<a href="/tag/{{tag.0}}">#{{tag.0}}</a>
-	</div>
-	{% endfor %}
 </div>
+<hr/>
+
+<div class="container">
+	<div id="tagList">
+		{% for tag in tag_list %}
+		<div class="span2">
+			<a href="/tag/{{tag.0}}">#{{tag.0}}</a>
+		</div>
+		{% endfor %}
+	</div>
 </div>
 <!-- end of message div-->
 {% endblock %}

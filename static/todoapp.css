@@ -32,11 +32,13 @@ body {
 	height: 15px;
 }
 
-.submit-button {
+#normal-message-form button {
 	display: block;
 	position: absolute;
 	bottom: 10px;
-	left: 422px;
+	left: 397px;
+	overflow:auto;
+	width:80px;
 }
 
 .panel {
@@ -68,3 +70,48 @@ body {
 	min-width:468px;
 }
 
+#wikiViewDiv textarea {
+	min-width:610px;
+}
+#wiki-message-form button {
+	display: block;
+	position: absolute;
+	bottom: 10px;
+	left: 540px;
+	overflow:auto;
+	width:80px;
+}
+
+.wiki-load-more {
+	padding:0px;
+	min-width:610px;
+	height:26px;
+	font-size:18px;
+	padding-top:4px;
+}
+#wiki-sidebar {
+	margin-left:40px;
+	min-height:400px;
+	line-height:20px;
+}
+
+#wiki-sidebar a {
+	color:black;
+}
+#wiki-sidebar li {
+	line-height:24px;
+}
+.wiki-p {
+	font-size: 20px;
+	height: 50px;
+	min-height: 50px;
+	text-align: center;
+	vertical-align: middle
+}
+.load-more {
+	padding:0px;
+	padding-top:5px;
+	min-width:100%;
+	height:26px;
+	font-size:18px;
+}

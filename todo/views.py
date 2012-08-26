@@ -145,9 +145,9 @@ def format_message(message):
 
     status_do.id = message.id
     message_tags = MessageTag.objects.filter(message=message)
-    status_do.message  = message.message + ' '
+    status_do.message  = message.message + ''
     for message_tag in message_tags:
-        status_do.message = status_do.message.replace(message_tag.tag.name+' ', '<a href="/tag/' + message_tag.tag.name.replace('#', '') + '">' + message_tag.tag.name + '</a>' + ' ')
+        status_do.message = status_do.message.replace(message_tag.tag.name+'', ' <a href="/tag/' + message_tag.tag.name.replace('#', '') + '">' + message_tag.tag.name + '</a> ' + ' ')
         mark_safe(status_do.message)
     status_do.message = status_do.message.strip()    
     return status_do
@@ -188,8 +188,10 @@ def process_message_form(request, redirecturl):
         #message_ = message_ + ' '
     
     # Find all hashtags.
-    tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message_)
-    print message_
+    #tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message_)
+    
+    tags = re.findall(r' #\w+|\A#\w+', message_)
+
     #Save message with primary tag
     primary_tag = None
     if tags is not None and len(tags) > 0:

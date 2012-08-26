@@ -1,6 +1,6 @@
 {% for message in message_list %}
 <div id="messageDisplay" style="position:relative;">
-	<div style="max-width:425px">
+	<div>
 	{% autoescape off %}{{message.message|urlize}}{% endautoescape %}
 	</div>
 	<br/>

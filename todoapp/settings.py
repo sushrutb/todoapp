@@ -208,6 +208,7 @@ system_tags = {
                 "#wishlist":('bought',),
                 "#readlater":('done',),
                 "#todo":('completed',),
+                "#wiki":None,
 #                "#invoice": ('sent','received'),
 #                "diary":None,
                 }

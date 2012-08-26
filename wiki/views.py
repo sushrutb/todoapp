@@ -23,12 +23,12 @@ def show_wiki(request):
             
     main_tag = '#wiki'
     wiki_tag = Tag.objects.get(user=request.user, name='#wiki')
+    print wiki_tag.name
     message_list = [message_tag.message.message for message_tag in MessageTag.objects.filter(tag=wiki_tag)]
     tag_data = mod_rec_process_messages2(message_list, main_tag)
     tag_data = tag_data[4:len(tag_data)-2]
     
     tag_data = add_links(tag_data)
-    #print tag_data
     
     message_tag_list = MessageTag.objects.filter(tag=wiki_tag).exclude(message__status='deleted').order_by('-last_modified')[:page_length * page]
     message_list = [format_message(message_tag.message) for message_tag in message_tag_list]
@@ -63,7 +63,7 @@ def show_wiki(request):
             last_page = True
 
     return render(request, 'wiki/wiki_view.html', {
-        'form': AddStatusForm(),
+        'form': AddStatusForm(initial={'message': '#wiki '}),
         'project_list':get_project_list(request.user),
         'popular_tag_list':get_popular_tags(request.user),
         'tag_list':tag_data,
@@ -105,7 +105,8 @@ def process_messages(message_list):
     tag_counters = {}
     final_tags = {}
     for message in message_list:
-        tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message)
+        tags = re.findall(r' #\w+|\A#\w+', message)
+        #tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message)
         if len(tags) == 0:
             continue
         for main_tag in tags:
@@ -168,25 +169,6 @@ def filter_message_list(message_list, process_tag):
         new_message_list.append(message)
 
     return new_message_list
-
-def mod_rec_process_messages(message_list, process_tag):
-    tag_data = []
-    
-    message_list = filter_message_list(message_list, process_tag)
-    message_list = strip_message_list(message_list, process_tag)
-    result = process_messages(message_list)
-    final_tags = result['final_tags']
-    subtags = []
-    for final_tag in final_tags.keys():
-        if final_tags[final_tag] == True:
-            subtags.append(mod_rec_process_messages(message_list, final_tag))
-            
-    tag_data.append(process_tag)
-    if len(subtags) > 0:
-        tag_data.append(subtags)
-    else:
-        return process_tag
-    return tag_data
 
 def mod_rec_process_messages2(message_list, process_tag):
     tag_data = []
