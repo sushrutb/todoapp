@@ -17,8 +17,15 @@
 {% if message_list %}
 <div id="messagesDiv">
 	{% include "todo/message_list.html" with message_list=message_list %}
+
+	{% ifequal last_page True %}
+	<a href="{{request.path}}?page={{page}}">
+	{% endifequal %}
+		<span class="btn btn-inverse load-more">Load more</span>
+	{% ifequal last_page True %}
+	</a>
+	{% endifequal %}
 	
-	<a href="{{request.path}}?page={{page}}"><span class="btn btn-inverse load-more">Load more</span></a>
 
 </div>
 {% else %}

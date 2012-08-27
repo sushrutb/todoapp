@@ -92,12 +92,19 @@ def get_tag_view(request, tag_name):
     form = AddStatusForm(initial={'message':'#' + tag_name + ' '})
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
+    
+    if MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').count()>page_length*page:
+        last_page = False
+    else:
+        last_page=True
+        
     return render(request, 'todo/index.html', {
         'form': form,
         'message_list':message_list,
         'project_list':project_list,
         'popular_tag_list':popular_tag_list,
         'page':page + 1,
+        'last_page':last_page,
     })
 
        
@@ -109,12 +116,18 @@ def index(request):
     message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')[:page_length * page]]
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
+    
+    if Message.objects.filter(user=user).exclude(status='deleted').count() >page_length * page:
+        last_page=False
+    else:
+        last_page = True 
     return render(request, 'todo/index.html', {
         'form': AddStatusForm(),
         'message_list':message_list,
         'project_list':project_list,
         'popular_tag_list':popular_tag_list,
         'page':page + 1,
+        'last_page':last_page,
     })
     
 @login_required
@@ -152,33 +165,6 @@ def format_message(message):
     status_do.message = status_do.message.strip()    
     return status_do
 
-def show_index_view(request, redirecturl, tag_name):
-    user = request.user
-    
-    # process form if the request is POST
-    if request.method == "POST":
-        form = AddStatusForm(request.POST)
-        if (form.is_valid()):
-            return process_message_form(request, redirecturl, tag_name)
-    
-    # Get status and format them
-    if tag_name is None:    
-        message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')]
-        form = AddStatusForm()
-    else:
-        tag = Tag.objects.get(user=user, name=tag_name)
-        message_list = [format_message(message_tag.message) for message_tag in MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').order_by('-last_modified')]
-        form = AddStatusForm(initial={'message':tag_name + ' '})
-    
-    project_list = get_project_list(user)
-    popular_tag_list = get_popular_tags(user)
-    return render(request, 'todo/index.html', {
-        'form': form,
-        'message_list':message_list,
-        'project_list':project_list,
-        'popular_tag_list':popular_tag_list,
-    })
-
 def process_message_form(request, redirecturl):
     form = AddStatusForm(request.POST)
     user = request.user
@@ -191,6 +177,7 @@ def process_message_form(request, redirecturl):
     #tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message_)
     
     tags = re.findall(r' #\w+|\A#\w+', message_)
+    tags = [tag_.strip() for tag_ in tags]
 
     #Save message with primary tag
     primary_tag = None
