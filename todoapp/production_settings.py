@@ -13,7 +13,7 @@ TEMPLATE_DIRS = (
 SITE_DOMAIN_NAME = 'simplycious.com'
 SITE_DOMAIN = 'simplycious.com'
 
-STATIC_URL = 'https://s3.amazonaws.com/prod.todoapp.sushrutbidwai.com/'
+STATIC_URL = 'http://s3.amazonaws.com/prod.todoapp.sushrutbidwai.com/'
 AWS_STORAGE_BUCKET_NAME = 'prod.todoapp.sushrutbidwai.com'
 
 STATIC_URL = '//s3.amazonaws.com/%s/' % AWS_STORAGE_BUCKET_NAME
