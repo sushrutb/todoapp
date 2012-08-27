@@ -10,6 +10,6 @@ from django.contrib.auth.models import User
 
 
 class AddStatusForm(forms.Form):
-    message = forms.CharField(widget=forms.Textarea(attrs={'class':'messageArea','rows':'4',}))
+    message = forms.CharField(widget=forms.TextInput(attrs={'class':'messageArea','rows':'4',}))
     
     
