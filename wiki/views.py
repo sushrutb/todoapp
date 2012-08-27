@@ -23,8 +23,8 @@ def show_wiki(request):
             
     main_tag = '#wiki'
     wiki_tag = Tag.objects.get(user=request.user, name='#wiki')
-    print wiki_tag.name
-    message_list = [message_tag.message.message for message_tag in MessageTag.objects.filter(tag=wiki_tag)]
+
+    message_list = [message_tag.message.message for message_tag in MessageTag.objects.filter(tag=wiki_tag).exclude(message__status='deleted')]
     tag_data = mod_rec_process_messages2(message_list, main_tag)
     tag_data = tag_data[4:len(tag_data)-2]
     
