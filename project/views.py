@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from forms import AddProjectForm
 from models import Project, ProjectUser
 from todo.models import Tag
-from todo.views import show_index_view
 
 
 @login_required
@@ -14,7 +13,7 @@ def index(request):
 
 @login_required
 def project(request, project_name):
-    return show_index_view(request, '/project/'+project_name, '#'+project_name)
+    return None
 
 @login_required
 def add_new(request):
