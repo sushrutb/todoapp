@@ -34,13 +34,10 @@ body {
 
 #normal-message-form button {
 	display: block;
-	position: absolute;
-	bottom: 10px;
-	left: 397px;
 	overflow:auto;
 	width:80px;
+	margin-left:390px;
 }
-
 .panel {
 	overflow: hidden;
 	display: block;
@@ -67,7 +64,13 @@ body {
 
 .messageArea {
 	max-width:100%;
-	min-width:468px;
+	width:468px;
+}
+#normalMessageDisplayDiv #messageDisplayArea {
+	width:432px;
+}
+#wikiMessageDisplayDiv #messageDisplayArea {
+	width:540px;
 }
 
 #wikiViewDiv textarea {

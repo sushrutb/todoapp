@@ -52,6 +52,8 @@ def edit_message(request, message_id):
 @login_required
 def get_tags(request):
     user = request.user
+    if request.method == 'POST':
+        return process_form(request)
     tag_list = Tag.objects.filter(user=user).order_by('name')
     tag_list = [(tag.name.replace('#', ''),) for tag in tag_list]
     project_list = get_project_list(user)
@@ -82,14 +84,16 @@ def search(request):
 
 @login_required    
 def get_tag_view(request, tag_name):
+    tag_name = '#'+tag_name
     page = int(request.GET.get('page', '1'))
-    tag = Tag.objects.get(user=request.user, name='#' + tag_name)
+    tag = Tag.objects.get(user=request.user, name=tag_name)
     user = request.user
-    process_form(request)
+    if request.method == 'POST':
+        return process_form(request)
     message_tag_list = MessageTag.objects.filter(tag=tag).exclude(message__status='deleted').order_by('-last_modified')[:page_length * page]
     
     message_list = [format_message(message_tag.message) for message_tag in message_tag_list]
-    form = AddStatusForm(initial={'message':'#' + tag_name + ' '})
+    form = AddStatusForm(initial={'message':tag_name + ' '})
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
     
@@ -105,6 +109,7 @@ def get_tag_view(request, tag_name):
         'popular_tag_list':popular_tag_list,
         'page':page + 1,
         'last_page':last_page,
+        'tag_name':tag_name.replace('#',''),
     })
 
        
@@ -112,7 +117,8 @@ def get_tag_view(request, tag_name):
 def index(request):
     page = int(request.GET.get('page', '1'))
     user = request.user
-    process_form(request)
+    if request.method == 'POST':
+        return process_form(request)
     message_list = [format_message(message) for message in Message.objects.filter(user=user).exclude(status='deleted').order_by('-last_modified')[:page_length * page]]
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
@@ -136,11 +142,9 @@ def update_status(request):
     new_status = request.GET.get('new_status', '')
     next_page = request.GET.get('next', '/')
     
-    print message_id
     message = Message.objects.get(id=long(message_id))
     message.status = new_status
     message.save()
-    print request.path
     return HttpResponseRedirect(next_page)
 
 def format_message(message):
@@ -150,6 +154,7 @@ def format_message(message):
         
         status_do.tag_id = primary_tag.id
         tag_status_list = SystemTagStatus.objects.filter(system_tag=SystemTag.objects.get(system_tag=primary_tag.name))
+        
         for tag_status in tag_status_list:
             if tag_status.status != message.status:
                 status_do.links.append(tag_status.status)
@@ -159,10 +164,14 @@ def format_message(message):
     status_do.id = message.id
     message_tags = MessageTag.objects.filter(message=message)
     status_do.message  = message.message + ''
+    flag = False
     for message_tag in message_tags:
+        if message_tag.tag.name == '#imp':
+            flag = True
         status_do.message = status_do.message.replace(message_tag.tag.name+'', ' <a href="/tag/' + message_tag.tag.name.replace('#', '') + '">' + message_tag.tag.name + '</a> ' + ' ')
         mark_safe(status_do.message)
-    status_do.message = status_do.message.strip()    
+    status_do.message = status_do.message.strip()
+    status_do.i = flag
     return status_do
 
 def process_message_form(request, redirecturl):
@@ -183,7 +192,6 @@ def process_message_form(request, redirecturl):
     primary_tag = None
     if tags is not None and len(tags) > 0:
         primary_tag_name = tags[0]
-        print 'primary tag >> ' + primary_tag_name
         try:
             primary_tag = Tag.objects.get(name=primary_tag_name, user=user)
         except Tag.DoesNotExist:
@@ -231,4 +239,4 @@ def process_form(request):
         form = AddStatusForm(request.POST)
         if (form.is_valid()):
             process_message_form(request, request.path)
-            return HttpResponseRedirect(request.path)
+            return HttpResponseRedirect(request.get_full_path())

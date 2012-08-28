@@ -1,7 +1,7 @@
 {% for message in message_list %}
-<div id="messageDisplay" style="position:relative;">
-	<div>
-	{% autoescape off %}{{message.message|urlize}}{% endautoescape %}
+<div id="messageDisplay" style="position:relative;{% if message.i%}color:red;{% endif %}">
+	<div id="messageDisplayArea">
+		{% autoescape off %}{{message.message|urlize}}{% endautoescape %}
 	</div>
 	<br/>
 	<div id="options" style="margin-top:10px;">

@@ -6,38 +6,39 @@ from todo.forms import AddStatusForm
 from todo.models import Tag, MessageTag, Message
 import re
 from todoapp.settings import page_length
-from todo.views import process_message_form, get_popular_tags, get_project_list, format_message
+from todo.views import process_message_form, get_popular_tags, get_project_list, format_message, process_form
 from django.db import connection
 
 @login_required
 def show_wiki(request):
+    return show_wiki_view(request, 'wiki')
     
+@login_required
+def show_wiki_view(request, tag_name):
+    tag_name = '#'+tag_name
     page = int(request.GET.get('page', '1'))
     
     if request.method == 'POST':
-        if request.method == "POST":
-            form = AddStatusForm(request.POST)
-            if (form.is_valid()):
-                process_message_form(request, "/")
-                return HttpResponseRedirect(request.path)
-            
-    main_tag = '#wiki'
-    wiki_tag = Tag.objects.get(user=request.user, name='#wiki')
+        return process_form(request)
 
-    message_list = [message_tag.message.message for message_tag in MessageTag.objects.filter(tag=wiki_tag).exclude(message__status='deleted')]
-    tag_data = mod_rec_process_messages2(message_list, main_tag)
+            
+    
+    main_tag = Tag.objects.get(user=request.user, name=tag_name)
+
+    message_list = [message_tag.message.message for message_tag in MessageTag.objects.filter(tag=main_tag).exclude(message__status='deleted')]
+    tag_data = mod_rec_process_messages2(message_list, tag_name)
     tag_data = tag_data[4:len(tag_data)-2]
     
     tag_data = add_links(tag_data)
     
-    message_tag_list = MessageTag.objects.filter(tag=wiki_tag).exclude(message__status='deleted').order_by('-last_modified')[:page_length * page]
+    message_tag_list = MessageTag.objects.filter(tag=main_tag).exclude(message__status='deleted').order_by('-last_modified')[:page_length * page]
     message_list = [format_message(message_tag.message) for message_tag in message_tag_list]
     
     
     filter_tags = request.GET.getlist('tag')
     if filter_tags is not None and len(filter_tags)>0:
         cursor = connection.cursor()
-        cursor.execute("select message_id from todo_messagetag where tag_id = %s", wiki_tag.id)
+        cursor.execute("select message_id from todo_messagetag where tag_id = %s", main_tag.id)
         message_id_list = set(cursor.fetchall())
         
         for filter_tag in filter_tags:
@@ -48,7 +49,6 @@ def show_wiki(request):
             message_id_list = message_id_list.intersection(message_ids)
             
         message_id_list = [id_[0] for id_ in message_id_list]
-        print message_id_list
             
         message_list = Message.objects.filter(id__in=message_id_list).exclude(status='deleted').order_by('-last_modified')[:page_length * page]
         message_list = [format_message(message) for message in message_list]
@@ -57,18 +57,19 @@ def show_wiki(request):
         else:
             last_page = True
     else:
-        if MessageTag.objects.filter(tag=wiki_tag).exclude(message__status='deleted').count() > page_length*page:
+        if MessageTag.objects.filter(tag=main_tag).exclude(message__status='deleted').count() > page_length*page:
             last_page = False
         else:
             last_page = True
 
     return render(request, 'wiki/wiki_view.html', {
-        'form': AddStatusForm(initial={'message': '#wiki '}),
+        'form': AddStatusForm(initial={'message': tag_name + ' '}),
         'project_list':get_project_list(request.user),
         'popular_tag_list':get_popular_tags(request.user),
         'tag_list':tag_data,
         'message_list':message_list,
         'last_page':last_page,
+        'main_tag':tag_name.replace('#',''),
     })
     
 def add_links(tag_data):

@@ -37,6 +37,7 @@ class StatusDO:
         self.links = []
         self.id = None
         self.tag_id = None
+        self.i = None
 
 class SystemTag(models.Model):
     system_tag = models.TextField()
