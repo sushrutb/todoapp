@@ -24,6 +24,7 @@ AWS_HEADERS = {
 'Expires': 'Wed, 22 Aug 2012 20:00:00 GMT',
 'Cache-Control': 'max-age=86400',
 }
+AWS_S3_SECURE_URLS = False
 GZIP_CONTENT_TYPES =  (
     'text/css',
     'application/javascript',
