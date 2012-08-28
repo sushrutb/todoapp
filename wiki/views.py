@@ -21,8 +21,6 @@ def show_wiki_view(request, tag_name):
     if request.method == 'POST':
         return process_form(request)
 
-            
-    
     main_tag = Tag.objects.get(user=request.user, name=tag_name)
 
     message_list = [message_tag.message.message for message_tag in MessageTag.objects.filter(tag=main_tag).exclude(message__status='deleted')]
@@ -150,7 +148,7 @@ def process_messages(message_list):
                 continue
             if final_tags[sec_tag]:
                 temp_total += tag_counters[sec_tag]
-        if temp_total >= total and total<5:
+        if temp_total >= total or total<3:
             final_tags1[main_tag] = False
         else:
             final_tags1[main_tag] = True
