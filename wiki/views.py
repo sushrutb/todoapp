@@ -150,7 +150,7 @@ def process_messages(message_list):
                 continue
             if final_tags[sec_tag]:
                 temp_total += tag_counters[sec_tag]
-        if temp_total >= total:
+        if temp_total >= total and total<5:
             final_tags1[main_tag] = False
         else:
             final_tags1[main_tag] = True
