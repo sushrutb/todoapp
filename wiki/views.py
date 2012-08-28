@@ -70,6 +70,7 @@ def show_wiki_view(request, tag_name):
         'message_list':message_list,
         'last_page':last_page,
         'main_tag':tag_name.replace('#',''),
+        'base_url':'/wiki_view/'+tag_name.replace('#',''),
     })
     
 def add_links(tag_data):
