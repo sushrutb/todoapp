@@ -25,6 +25,8 @@ def new_message(request):
     
 def view_help(request):
     return render(request, 'help.html', {})
+def view_introduction(request):
+    return render(request, 'introduction.html', {})
     
 @login_required
 def edit_message(request, message_id):
