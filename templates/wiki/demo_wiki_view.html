@@ -119,13 +119,12 @@
 						<hr/>
 						{% endfor %}
 					</div>
-					{% ifequal last_page True %}
+					{% if not last_page %}
+					
 					<a href="{{request.path}}?page={{page}}">
-					{% endifequal %}
 						<span class="btn btn-inverse wiki-load-more">Load more</span>
-					{% ifequal last_page True %}
 					</a>
-					{% endifequal %}
+					{% endif %}
 				</div>
 				{% else %}
 					<p class="wiki-p">Sorry, no messages found. </p>

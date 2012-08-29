@@ -81,13 +81,13 @@
 					<div style="min-height:250px;min-width: 500px" id="wikiMessageDisplayDiv">
 					{% include "todo/message_list.html" with message_list=message_list %}
 					</div>
-					{% ifequal last_page True %}
+					{% if not last_page %}
 					<a href="{{request.path}}?page={{page}}">
-					{% endifequal %}
+					{% endif %}
 						<span class="btn btn-inverse wiki-load-more">Load more</span>
-					{% ifequal last_page True %}
+					{% if not last_page %}
 					</a>
-					{% endifequal %}
+					{% endif %}
 				</div>
 				{% else %}
 					<p class="wiki-p">Sorry, no messages found. </p>

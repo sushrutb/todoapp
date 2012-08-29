@@ -62,6 +62,7 @@ def show_demo_wiki_view(request,tag_name):
         'tag_list':tag_data,
         'message_list':message_list,
         'last_page':last_page,
+        'page':page+1,
         'main_tag':tag_name.replace('#',''),
         'base_url':'/demo/'+tag_name.replace('#',''),
     })
@@ -120,6 +121,7 @@ def show_wiki_view(request, tag_name):
         'tag_list':tag_data,
         'message_list':message_list,
         'last_page':last_page,
+        'page':page+1,
         'main_tag':tag_name.replace('#',''),
         'base_url':'/wiki_view/'+tag_name.replace('#',''),
     })

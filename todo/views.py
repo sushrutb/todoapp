@@ -25,6 +25,7 @@ def new_message(request):
     
 def view_help(request):
     return render(request, 'help.html', {})
+
 def view_introduction(request):
     return render(request, 'introduction.html', {})
     
@@ -125,10 +126,11 @@ def index(request):
     project_list = get_project_list(user)
     popular_tag_list = get_popular_tags(user)
     
-    if Message.objects.filter(user=user).exclude(status='deleted').count() >page_length * page:
-        last_page=False
+    if Message.objects.filter(user=user).exclude(status='deleted').count() > (page_length * page):
+        last_page = False
     else:
-        last_page = True 
+        last_page = True
+
     return render(request, 'todo/index.html', {
         'form': AddStatusForm(),
         'message_list':message_list,
