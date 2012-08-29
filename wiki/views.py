@@ -160,7 +160,8 @@ def process_messages(message_list):
     tag_counters = {}
     final_tags = {}
     for message in message_list:
-        tags = re.findall(r' #\w+|\A#\w+', message)
+        #tags = re.findall(r' #\w+|\A#\w+', message)
+        tags = re.findall(r' #(?:[a-zA-Z]|[-])+|\A#(?:[a-zA-Z]|[-])+', message)
         tags = [tag_.strip() for tag_ in tags]
         #tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message)
         if len(tags) == 0:

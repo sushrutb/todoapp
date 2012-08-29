@@ -8,6 +8,9 @@ from django.utils.safestring import mark_safe
 from django.db import connection
 import re
 from todoapp.settings import page_length
+import urllib2
+from bs4 import BeautifulSoup
+
 
 @login_required
 def new_message(request):
@@ -17,11 +20,32 @@ def new_message(request):
         if (form.is_valid()):
             process_message_form(request, "/")
             return HttpResponseRedirect(request.GET.get('url','/'))
-        
-    form = AddStatusForm(initial={'message': '#'+request.GET.get('tag','bookmark ')+' ' + request.GET.get('url','')})    
+    initial_str = '#'+request.GET.get('tag','bookmark ')+' ' + request.GET.get('url','')
+    hashtags = process_url(request.GET.get('url',''))
+    initial_str += ' ' + hashtags
+    form = AddStatusForm(initial={'message': initial_str})    
     return render(request, 'todo/new_message.html', {
         'form': form,
     })
+    
+def process_url(url):
+    if url == '':
+        return ''
+    if 'stackoverflow.com' not in url:
+        return ''
+    
+    html = urllib2.urlopen(url)
+    input_html = html.read()
+    soup = BeautifulSoup(input_html)
+    
+    #tag_list = soup.find_all('/questions/tagged/')
+    tag_list = soup.find_all("div",class_='post-taglist')
+    post_taglist = tag_list[0]
+    links = post_taglist.find_all("a")
+    hashtags = ''
+    for link_ in links:
+        hashtags += ' #' + link_.text
+    return hashtags
     
 def view_help(request):
     return render(request, 'help.html', {})
@@ -172,7 +196,9 @@ def format_message(message):
     for message_tag in message_tags:
         if message_tag.tag.name == '#imp':
             flag = True
-        status_do.message = status_do.message.replace(message_tag.tag.name+'', ' <a href="/tag/' + message_tag.tag.name.replace('#', '') + '">' + message_tag.tag.name + '</a> ' + ' ')
+        status_do.message = re.sub(' #(?:' + message_tag.tag.name.replace('#','')+')\\b|\\A#(?:' + message_tag.tag.name.replace('#','') + ')\\b', 
+                                   ' <a href="/tag/' + message_tag.tag.name.replace('#', '') + '">' + message_tag.tag.name + '</a>' + '',
+                                   status_do.message)
         mark_safe(status_do.message)
     status_do.message = status_do.message.strip()
     status_do.i = flag
@@ -189,7 +215,7 @@ def process_message_form(request, redirecturl):
     # Find all hashtags.
     #tags = re.findall('#(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message_)
     
-    tags = re.findall(r' #\w+|\A#\w+', message_)
+    tags = re.findall(r' #(?:[a-zA-Z]|[-])+\b|\A#(?:[a-zA-Z]|[-])+\b', message_)
     tags = [tag_.strip() for tag_ in tags]
 
     #Save message with primary tag
