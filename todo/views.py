@@ -33,19 +33,22 @@ def process_url(url):
         return ''
     if 'stackoverflow.com' not in url:
         return ''
-    
-    html = urllib2.urlopen(url)
-    input_html = html.read()
-    soup = BeautifulSoup(input_html)
-    
-    #tag_list = soup.find_all('/questions/tagged/')
-    tag_list = soup.find_all("div",class_='post-taglist')
-    post_taglist = tag_list[0]
-    links = post_taglist.find_all("a")
-    hashtags = ''
-    for link_ in links:
-        hashtags += ' #' + link_.text
-    return hashtags
+
+    try:
+        html = urllib2.urlopen(url)
+        input_html = html.read()
+        soup = BeautifulSoup(input_html)
+        
+        #tag_list = soup.find_all('/questions/tagged/')
+        tag_list = soup.find_all("div",class_='post-taglist')
+        post_taglist = tag_list[0]
+        links = post_taglist.find_all("a")
+        hashtags = ''
+        for link_ in links:
+            hashtags += ' #' + link_.text
+        return hashtags
+    except Exception:
+        return ''
     
 def view_help(request):
     return render(request, 'help.html', {})
