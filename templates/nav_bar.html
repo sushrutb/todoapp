@@ -16,17 +16,6 @@
 	        		</ul>
 	              </li>
 	              <li><a href="/wiki_view/wiki/">#wiki</a></li>
-	              <!-- removed projects for a while.
-	              <li class="dropdown">
-	              	<a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects <b class="caret"></b></a>
-	        		<ul class="dropdown-menu">
-	        			{% for project in project_list %}
-	        			<li><a href="/project/{{project.name}}">{{project.name}}</a></li>
-	        			{% endfor %}
-	          			<li><a href="/project/new/">+ Create new</a></li>
-	        		</ul>
-	              </li>
-	              -->
 	            </ul>
 	          </div><!--/.nav-collapse -->
 			<form class="navbar-form pull-left" action="/search/" method="get">
@@ -36,10 +25,11 @@
 		</div>
 		{% else %}
 	        <div class="nav-collapse pull-right">
-	            <ul class="nav">
-					<li class="dropdown">
-						<a class="brand pull-right" href="/introduction/">Learn More</a>
-					</li>
+	            <ul class="nav pull-right">
+	            	<li><a href="/accounts/register/">Sign up</a></li>
+	            	<li><a href="/accounts/login/">Login</a></li>
+					<li><a href="/demo/startups/">Demo</a></li>
+					<li><a href="/introduction/">Learn More</a></li>
 				</ul>
 			</div>
 		{% endif %}

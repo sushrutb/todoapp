@@ -33,7 +33,7 @@
 		<!-- end nav bar -->
 		<div class="row" style="margin:0px;padding: 0px;text-align: center;">
 			<h3>This is a demo of wiki interface. </h3>
-			<span>This wiki is for startups, mainly in India. Organized using various tags like #bootstrapped, #funded, #enterprise, #consumer etc.</span>
+			<span>This wiki is to organize like of startups, mainly in India. Organized using various tags like #bootstrapped, #funded, #enterprise, #consumer etc.</span>
 		</div>
 		<hr/>
 			
@@ -88,7 +88,7 @@
 		        			</div>
 		    			</div>
 		    			{% endfor %}
-					    <div id="normal-message-form-btn" style="bottom:0px;">
+					    <div id="normal-message-form-btn">
 						<button type="submit" class="btn btn-primary" disabled="disabled">Save</button>
 						</div>
 					</form>
@@ -98,7 +98,26 @@
 				{% if message_list %}
 				<div id="messagesDiv">
 					<div style="min-height:250px;min-width: 500px" id="wikiMessageDisplayDiv">
-					{% include "todo/message_list.html" with message_list=message_list %}
+						{% for message in message_list %}
+						<div id="messageDisplay" style="position:relative;{% if message.i%}color:red;{% endif %}">
+							<div id="messageDisplayArea">
+								{% autoescape off %}{{message.message|urlize}}{% endautoescape %}
+							</div>
+							<br/>
+							<div id="options" style="margin-top:10px;">
+								{% for link_ in message.links %}
+								<span class="label label-info">{{link_}}</span>
+								{% endfor %}
+							</div>
+							<div class="more-message" id="showMore"><span id="moreText" class="label label-important" style="cursor:pointer;" >more</span></div>
+							<div id="more-message-options">
+								<hr/>
+								<span class="label label-error">delete</span>
+								<span class="label label-error">edit</span>
+							</div>
+						</div>
+						<hr/>
+						{% endfor %}
 					</div>
 					{% ifequal last_page True %}
 					<a href="{{request.path}}?page={{page}}">
