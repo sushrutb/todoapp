@@ -72,6 +72,9 @@ body {
 #wikiMessageDisplayDiv #messageDisplayArea {
 	width:540px;
 }
+#wikiMessageDisplayDiv #messageDisplayArea a {
+		color:black;
+}
 
 #wikiViewDiv textarea {
 	min-width:610px;

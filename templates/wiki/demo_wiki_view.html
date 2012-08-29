@@ -31,13 +31,19 @@
 		<!-- nav bar -->
 		{% include "nav_bar.html"%}
 		<!-- end nav bar -->
-		
+		<div class="row" style="margin:0px;padding: 0px;text-align: center;">
+			<h3>This is a demo of wiki interface. </h3>
+			<span>This wiki is for startups, mainly in India. Organized using various tags like #bootstrapped, #funded, #enterprise, #consumer etc.</span>
+		</div>
+		<hr/>
+			
 		<!-- Main content -->
+		
 		<div class="row" style="min-height:400px" id="wikiViewDiv">
 			<!-- sidebar -->
 			<div class="span3" id="wiki-sidebar">
 				<div style="font-size: 16px;background-color: lightgray;width: 100%;color:black;text-align: center;line-height: 26px;">
-					<span><a href="/wiki_view/{{main_tag}}/">#{{main_tag}}</a></span>
+					<span><a href="/demo/{{main_tag}}/">#{{main_tag}}</a></span>
 				</div>
 					
 				<ul style="margin-top: 10px;">
@@ -71,10 +77,24 @@
 			<!-- content -->
 			<div class="span8" style="border-left: 1px outset lightgray;padding-left:40px;min-height:400px;min-width: 500px;">
 				<!-- form div -->
-				<div id="wiki-message-form">
+ 				<div id="wiki-message-form">
 					{% load bootstrap_tags %}
-					{% include "todo/message_form.html" with form=form %}
+					<div style="position:relative;">
+					<form class="form-vertical" id="messageForm">
+						{% for field in form %}
+						<div id="div_id_message" class="control-group">
+		        			<div class="controls">
+		             			{{ field }}
+		        			</div>
+		    			</div>
+		    			{% endfor %}
+					    <div id="normal-message-form-btn" style="bottom:0px;">
+						<button type="submit" class="btn btn-primary" disabled="disabled">Save</button>
+						</div>
+					</form>
+					</div>
 				</div>
+				<hr/>
 				{% if message_list %}
 				<div id="messagesDiv">
 					<div style="min-height:250px;min-width: 500px" id="wikiMessageDisplayDiv">

@@ -1,17 +1,70 @@
 # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
 from todo.forms import AddStatusForm
 from todo.models import Tag, MessageTag, Message
 import re
 from todoapp.settings import page_length
-from todo.views import process_message_form, get_popular_tags, get_project_list, format_message, process_form
+from todo.views import get_popular_tags, get_project_list, format_message, process_form
 from django.db import connection
+from django.contrib.auth.models import User
 
 @login_required
 def show_wiki(request):
     return show_wiki_view(request, 'wiki')
+    
+def show_demo_wiki_view(request,tag_name):
+    tag_name = '#'+tag_name
+    user = User.objects.get(username='demo_user')
+    page = int(request.GET.get('page', '1'))
+    
+    main_tag = get_object_or_404(Tag, user=user, name=tag_name)
+
+    message_list = [message_tag.message.message for message_tag in MessageTag.objects.filter(tag=main_tag).exclude(message__status='deleted')]
+    tag_data = mod_rec_process_messages2(message_list, tag_name)
+    tag_data = tag_data[4:len(tag_data)-2]
+    
+    tag_data = add_links(tag_data)
+    
+    message_tag_list = MessageTag.objects.filter(tag=main_tag).exclude(message__status='deleted').order_by('-last_modified')[:page_length * page]
+    message_list = [format_message(message_tag.message) for message_tag in message_tag_list]
+    
+    
+    filter_tags = request.GET.getlist('tag')
+    if filter_tags is not None and len(filter_tags)>0:
+        cursor = connection.cursor()
+        cursor.execute("select message_id from todo_messagetag where tag_id = %s", main_tag.id)
+        message_id_list = set(cursor.fetchall())
+        
+        for filter_tag in filter_tags:
+            filter_tag = Tag.objects.get(name='#'+filter_tag, user=user)
+            cursor = connection.cursor()
+            cursor.execute("select message_id from todo_messagetag where tag_id = %s", filter_tag.id)
+            message_ids = set(cursor.fetchall())
+            message_id_list = message_id_list.intersection(message_ids)
+            
+        message_id_list = [id_[0] for id_ in message_id_list]
+            
+        message_list = Message.objects.filter(id__in=message_id_list).exclude(status='deleted').order_by('-last_modified')[:page_length * page]
+        message_list = [format_message(message) for message in message_list]
+        if Message.objects.filter(id__in=message_id_list).exclude(status='deleted').order_by('-last_modified').count() > page_length*page:
+            last_page = False
+        else:
+            last_page = True
+    else:
+        if MessageTag.objects.filter(tag=main_tag).exclude(message__status='deleted').count() > page_length*page:
+            last_page = False
+        else:
+            last_page = True
+
+    return render(request, 'wiki/demo_wiki_view.html', {
+        'form': AddStatusForm(initial={'message': tag_name + ' '}),
+        'tag_list':tag_data,
+        'message_list':message_list,
+        'last_page':last_page,
+        'main_tag':tag_name.replace('#',''),
+        'base_url':'/demo/'+tag_name.replace('#',''),
+    })
     
 @login_required
 def show_wiki_view(request, tag_name):
@@ -146,9 +199,9 @@ def process_messages(message_list):
         for sec_tag in tag_details.keys():
             if sec_tag == 'total':
                 continue
-            if final_tags[sec_tag]:
+            if final_tags[sec_tag] == True and tag_counters[sec_tag]>total:
                 temp_total += tag_counters[sec_tag]
-        if temp_total >= total or total<3:
+        if temp_total >= total or total<2:
             final_tags1[main_tag] = False
         else:
             final_tags1[main_tag] = True

@@ -45,8 +45,10 @@
 
 
 {% block scripts %}
-    <script>
-	$(document).ready(function(){ 
+    
+	<script>
+	$(document).ready(function(){
+		$("input[id$='id_message']").focus(); 
 		$(this).find('#messagesDiv #showMore').click(
 		function(){
 			if ($(this).find('#moreText').html() == "more") {
